@@ -15,7 +15,7 @@ using namespace WinLite;
 
 int main()
 {
-    if (auto result = SoftwareWindow::Create(100, 100, 800, 600, "Random color pixels"); !result)
+    if (auto result = SoftwareWindow::Create(800, 600, "Random color pixels"); !result)
     {
         std::cout << "Error: " << result.error() << std::endl;
         return -1;

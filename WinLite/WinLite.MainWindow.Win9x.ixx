@@ -21,7 +21,7 @@ export namespace WinLite
     class MainWindow
     {
     public:
-        static std::expected<MainWindow, std::string> Create(int x, int y, int w, int h, const std::string& title)
+        static std::expected<MainWindow, std::string> Create(int w, int h, const std::string& title)
         {
             HINSTANCE instance = GetModuleHandleA(nullptr);
             if (instance == nullptr)
@@ -46,7 +46,21 @@ export namespace WinLite
                 }
             }
 
-            HWND hwnd = CreateWindowA(ClassName, title.c_str(), WS_OVERLAPPED | WS_SYSMENU, x, y, w, h, nullptr, nullptr, instance, nullptr);
+            RECT  rect  = { 0, 0, static_cast<LONG>(w), static_cast<LONG>(h) };
+            DWORD style = WS_OVERLAPPED | WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX;
+
+            AdjustWindowRect(&rect, style, FALSE);
+
+            int width  = rect.right  - rect.left;
+            int height = rect.bottom - rect.top;
+
+            int screenWidth  = GetSystemMetrics(SM_CXSCREEN);
+            int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+
+            int posX = (screenWidth  - width)  / 2;
+            int posY = (screenHeight - height) / 2;
+
+            HWND hwnd  = CreateWindowA(ClassName, title.c_str(), WS_OVERLAPPED | WS_SYSMENU, posX, posY, width, height, nullptr, nullptr, instance, nullptr);
 
             if (hwnd == nullptr)
             {
