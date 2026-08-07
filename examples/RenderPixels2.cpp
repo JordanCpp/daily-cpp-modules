@@ -3,11 +3,11 @@
 // (See accompanying file LICENSE_1_0.txt or copy at
 // https://boost.org)
 
-#include <cstdint>
-#include <vector>
-#include <iostream>
 #include <span>
 #include <cmath>
+#include <vector>
+#include <cstdint>
+#include <iostream>
 
 import WinLite;
 import SoftwareRender;
