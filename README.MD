@@ -99,8 +99,11 @@ This project is open-source software licensed under the **Boost Software License
 Here is the `RenderPixels` showcase running live, combining both **WinLite** (window management) and **SoftwareRender** (fixed-point canvas primitives, Bresenham lines, and clipping math) modules:
 
 <p align="center">
-  <img src="./screenshots/RenderPixels1.jpg" alt="Render Pixels Demo 1" width="45%" />
-  <img src="./screenshots/RenderPixels2.jpg" alt="Render Pixels Demo 2" width="45%" />
+  <img src="./screenshots/MorphingJuliaFractal.jpg" alt="Morphing Julia Fractal" width="75%" />
+  <img src="./screenshots/RetroTunnelEffect.jpg"    alt="Retro Tunnel Effect"    width="75%" />
+  <img src="./screenshots/StarfieldSimulation.jpg"  alt="Starfield Simulation"   width="75%" />
+  <img src="./screenshots/RenderPixels1.jpg"        alt="Render Pixels Demo 1"   width="75%" />
+  <img src="./screenshots/RenderPixels2.jpg"        alt="Render Pixels Demo 2"   width="75%" />
 </p>
 
 ---
