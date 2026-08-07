@@ -7,6 +7,7 @@
 #include <vector>
 #include <cstdint>
 #include <iostream>
+#include <algorithm>
 
 import WinLite;
 import SoftwareRender;
@@ -16,11 +17,15 @@ using namespace Software;
 
 int main()
 {
-    constexpr int width = 800;
-    constexpr int height = 600;
-    constexpr int bytesPerPixel = 3;
+    constexpr std::size_t width = 800;
+    constexpr std::size_t height = 600;
+    constexpr std::size_t bytesPerPixel = 3;
 
-    auto windowResult = SoftwareWindow::Create(width, height, "Daily C++ Modules: Combined Demo");
+    auto windowResult = SoftwareWindow::Create(
+        static_cast<int>(width),
+        static_cast<int>(height),
+        "Daily C++ Modules: Combined Demo"
+    );
 
     if (!windowResult)
     {
@@ -32,7 +37,7 @@ int main()
 
     std::vector<std::uint8_t> frameBuffer(width * height * bytesPerPixel);
 
-    SoftwareRender<bytesPerPixel> render(width, height, std::span<std::uint8_t>(frameBuffer));
+    SoftwareRender<bytesPerPixel> render(width, height, std::span<std::uint8_t>(frameBuffer.data(), frameBuffer.size()));
 
     constexpr Color backgroundColor{ 24, 28, 36 };
     constexpr Color gridColor{ 46, 54, 66 };
@@ -55,13 +60,14 @@ int main()
 
         render.Clear(backgroundColor);
 
-        for (int x = 0; x < width; x += 40)
+        for (int x = 0; x < static_cast<int>(width); x += 40)
         {
-            render.Line(x, 0, x, height, gridColor);
+            render.Line(x, 0, x, static_cast<int>(height), gridColor);
         }
-        for (int y = 0; y < height; y += 40)
+
+        for (int y = 0; y < static_cast<int>(height); y += 40)
         {
-            render.Line(0, y, width, y, gridColor);
+            render.Line(0, y, static_cast<int>(width), y, gridColor);
         }
 
         render.Fill(100, 100, 250, 180, rectColor);
@@ -72,12 +78,19 @@ int main()
 
         for (int i = 0; i < 150; i += 4)
         {
-            render.Pixel(300 + i, 200 + animationOffset / 4, pixelColor);
+            std::size_t px = static_cast<std::size_t>(300 + i);
+            std::size_t py = static_cast<std::size_t>(200 + animationOffset / 4);
+            render.Pixel(px, py, pixelColor);
         }
 
         animationOffset = (animationOffset + 2) % 600;
 
-        window.Present(frameBuffer.data(), bytesPerPixel, width, height);
+        window.Present(
+            frameBuffer.data(),
+            static_cast<int>(bytesPerPixel),
+            static_cast<int>(width),
+            static_cast<int>(height)
+        );
     }
 
     return 0;
