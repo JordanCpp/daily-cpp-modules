@@ -30,7 +30,7 @@ int main()
 
     SoftwareWindow window = std::move(*windowResult);
     std::vector<std::uint8_t> frameBuffer(width * height * bytesPerPixel);
-    SoftwareRender render(width, height, bytesPerPixel, std::span<std::uint8_t>(frameBuffer));
+    SoftwareRender<bytesPerPixel> render(width, height, std::span<std::uint8_t>(frameBuffer));
 
     float time = 0.0f;
 

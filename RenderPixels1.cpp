@@ -32,7 +32,7 @@ int main()
 
     std::vector<std::uint8_t> frameBuffer(width * height * bytesPerPixel);
 
-    SoftwareRender render(width, height, bytesPerPixel, std::span<std::uint8_t>(frameBuffer));
+    SoftwareRender<bytesPerPixel> render(width, height, std::span<std::uint8_t>(frameBuffer));
 
     constexpr Color backgroundColor{ 24, 28, 36 };
     constexpr Color gridColor{ 46, 54, 66 };
