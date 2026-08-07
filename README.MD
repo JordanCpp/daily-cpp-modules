@@ -91,3 +91,16 @@ Have a tiny C++23 utility module that you use in every project? Feel free to ope
 
 ## 📄 License
 This project is open-source software licensed under the **Boost Software License - Version 1.0 - August 17th, 2003**. Use these modules freely in personal, educational, or commercial projects.
+
+---
+
+## 🖼️ Gallery & Demos
+
+Here is the `RenderPixels` showcase running live, combining both **WinLite** (window management) and **SoftwareRender** (fixed-point canvas primitives, Bresenham lines, and clipping math) modules:
+
+<p align="center">
+  <img src="./screenshots/RenderPixels1.jpg" alt="Render Pixels Demo 1" width="45%" />
+  <img src="./screenshots/RenderPixels2.jpg" alt="Render Pixels Demo 2" width="45%" />
+</p>
+
+---

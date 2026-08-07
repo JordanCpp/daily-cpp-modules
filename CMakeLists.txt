@@ -27,3 +27,9 @@ foreach(dir_path ${sub_directories})
     endif()
 
 endforeach()
+
+add_executable(RenderPixels1 "RenderPixels1.cpp")
+target_link_libraries(RenderPixels1 PRIVATE WinLite SoftwareRender)
+
+add_executable(RenderPixels2 "RenderPixels2.cpp")
+target_link_libraries(RenderPixels2 PRIVATE WinLite SoftwareRender)
