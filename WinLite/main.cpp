@@ -15,37 +15,38 @@ using namespace WinLite;
 
 int main()
 {
-    if (auto result = SoftwareWindow::Create(800, 600, "Random color pixels"); !result)
+    auto result = SoftwareWindow::Create(800, 600, "Random color pixels");
+
+    if (!result)
     {
         std::cout << "Error: " << result.error() << std::endl;
         return -1;
     }
-    else
+
+    SoftwareWindow window = std::move(*result);
+    std::vector<uint8_t> screen(800 * 600 * 3);
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<uint16_t> dist(0, 255);
+
+    while (window.IsRunning())
     {
-        SoftwareWindow window = std::move(*result);
-        std::vector<uint8_t> screen(800 * 600 * 3);
+        Event event;
 
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<uint16_t> dist(0, 255);
-
-        while (window.IsRunning())
+        while (window.GetEvent(event))
         {
-            Event event;
-            while (window.GetEvent(event))
+            if (event.Type == EventType::Quit)
             {
-                if (event.Type == EventType::Quit)
-                {
-                    window.StopEvent();
-                }
+                window.StopEvent();
             }
-
-            std::ranges::generate(screen, [&]() {
-                return static_cast<uint8_t>(dist(gen));
-                });
-
-            window.Present(screen.data(), 3, 800, 600);
         }
+
+        std::ranges::generate(screen, [&]() {
+            return static_cast<uint8_t>(dist(gen));
+            });
+
+        window.Present(screen.data(), 3, 800, 600);
     }
 
     return 0;
