@@ -8,4 +8,4 @@ module;
 export module WinLite;
 
 export import WinLite.Events;
-export import WinLite.Window;
+export import WinLite.SoftwareWindow;

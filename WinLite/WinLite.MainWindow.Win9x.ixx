@@ -182,6 +182,11 @@ export namespace WinLite
             return _events.IsRunning();
         }
 
+        HDC GetHdc()
+        {
+            return _hdc;
+        }
+
         MainWindow(const MainWindow&) = delete;
         MainWindow& operator=(const MainWindow&) = delete;
 

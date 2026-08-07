@@ -3,7 +3,11 @@
 // (See accompanying file LICENSE_1_0.txt or copy at
 // https://www.boost.org/LICENSE_1_0.txt)
 
+#include <cstdint>
+#include <vector>
 #include <iostream>
+#include <random>
+#include <algorithm>
 
 import WinLite;
 
@@ -11,14 +15,19 @@ using namespace WinLite;
 
 int main()
 {
-    if (auto result = Window::Create(100, 100, 800, 600, "WinLite::Window::Title"); !result)
+    if (auto result = SoftwareWindow::Create(100, 100, 800, 600, "Random color pixels"); !result)
     {
         std::cout << "Error: " << result.error() << std::endl;
         return -1;
     }
     else
     {
-        Window window = std::move(*result);
+        SoftwareWindow window = std::move(*result);
+        std::vector<uint8_t> screen(800 * 600 * 3);
+
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<uint16_t> dist(0, 255);
 
         while (window.IsRunning())
         {
@@ -30,6 +39,12 @@ int main()
                     window.StopEvent();
                 }
             }
+
+            std::ranges::generate(screen, [&]() {
+                return static_cast<uint8_t>(dist(gen));
+                });
+
+            window.Present(screen.data(), 3, 800, 600);
         }
     }
 

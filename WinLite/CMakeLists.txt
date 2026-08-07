@@ -9,14 +9,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_library(WinLite)
 
 if(WIN32)
-    set(MODULE_FILE WinLite.MainWindow.Win9x.ixx)
+    set(MODULE_FILE 
+    "WinLite.MainWindow.Win9x.ixx"
+    "WinLite.SoftwareWindow.Win9x.ixx")
 else()
     set(MODULE_FILE WinLite.MainWindow.Linux.ixx)
 endif()
 
 target_sources(WinLite PUBLIC FILE_SET CXX_MODULES FILES 
     "WinLite.ixx" 
-    "WinLite.Window.ixx" 
     "WinLite.Events.ixx" 
     "WinLite.Queue.ixx" ${MODULE_FILE})
 
