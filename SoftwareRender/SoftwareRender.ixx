@@ -9,6 +9,7 @@ module;
 #include <cmath>
 #include <cstdint>
 #include <algorithm>
+#include <stdexcept>
 
 export module SoftwareRender;
 
@@ -33,33 +34,36 @@ export namespace Software
         }
     };
 
-    template <std::size_t BytesPerPixel>
     class SoftwareRender
     {
-        static_assert(BytesPerPixel == 3 || BytesPerPixel == 4, "Only 3 or 4 bytes per pixel are supported.");
-
     private:
         std::size_t _width;
         std::size_t _height;
+        std::size_t _bytesPerPixel;
         std::span<std::uint8_t> _pixels;
 
     public:
-        constexpr SoftwareRender(std::size_t w, std::size_t h, std::span<std::uint8_t> pixels) noexcept :
+        constexpr SoftwareRender(std::size_t w, std::size_t h, std::size_t bytesPerPixel, std::span<std::uint8_t> pixels) :
             _width(w),
             _height(h),
+            _bytesPerPixel(bytesPerPixel),
             _pixels(pixels)
         {
+            if (_bytesPerPixel != 3 && _bytesPerPixel != 4)
+            {
+                throw std::invalid_argument("Only 3 or 4 bytes per pixel are supported.");
+            }
         }
 
         constexpr void Clear(Color color) noexcept
         {
-            if (color.r == color.g && color.g == color.b && (BytesPerPixel == 3 || color.g == color.a))
+            if (color.r == color.g && color.g == color.b && (_bytesPerPixel == 3 || color.g == color.a))
             {
                 std::fill(_pixels.begin(), _pixels.end(), color.r);
                 return;
             }
 
-            if constexpr (BytesPerPixel == 4)
+            if (_bytesPerPixel == 4)
             {
                 for (std::size_t i = 0; i < _pixels.size(); i += 4)
                 {
@@ -69,7 +73,7 @@ export namespace Software
                     _pixels[i + 3] = color.a;
                 }
             }
-            else if constexpr (BytesPerPixel == 3)
+            else if (_bytesPerPixel == 3)
             {
                 for (std::size_t i = 0; i < _pixels.size(); i += 3)
                 {
@@ -87,15 +91,15 @@ export namespace Software
                 return;
             }
 
-            const std::size_t index = (y * _width + x) * BytesPerPixel;
+            const std::size_t index = (y * _width + x) * _bytesPerPixel;
 
-            if (index + BytesPerPixel <= _pixels.size()) [[likely]]
+            if (index + _bytesPerPixel <= _pixels.size()) [[likely]]
             {
                 _pixels[index + 0] = color.r;
                 _pixels[index + 1] = color.g;
                 _pixels[index + 2] = color.b;
 
-                if constexpr (BytesPerPixel == 4)
+                if (_bytesPerPixel == 4)
                 {
                     _pixels[index + 3] = color.a;
                 }
@@ -156,39 +160,39 @@ export namespace Software
 
             for (std::size_t currY = y0; currY < y1; ++currY)
             {
-                std::size_t rowStart = (currY * _width + x0) * BytesPerPixel;
+                std::size_t rowStart = (currY * _width + x0) * _bytesPerPixel;
 
                 for (std::size_t currX = x0; currX < x1; ++currX)
                 {
-                    if (rowStart + BytesPerPixel <= _pixels.size()) [[likely]]
+                    if (rowStart + _bytesPerPixel <= _pixels.size()) [[likely]]
                     {
                         _pixels[rowStart + 0] = color.r;
                         _pixels[rowStart + 1] = color.g;
                         _pixels[rowStart + 2] = color.b;
 
-                        if constexpr (BytesPerPixel == 4)
+                        if (_bytesPerPixel == 4)
                         {
                             _pixels[rowStart + 3] = color.a;
                         }
                     }
-                    rowStart += BytesPerPixel;
+                    rowStart += _bytesPerPixel;
                 }
             }
         }
 
         [[nodiscard]] constexpr std::size_t GetWidth() const noexcept
         {
-            return _width; 
+            return _width;
         }
 
-        [[nodiscard]] constexpr std::size_t GetHeight() const noexcept 
-        { 
+        [[nodiscard]] constexpr std::size_t GetHeight() const noexcept
+        {
             return _height;
         }
 
-        [[nodiscard]] static constexpr std::size_t GetBytesPerPixel() noexcept 
-        { 
-            return BytesPerPixel; 
+        [[nodiscard]] constexpr std::size_t GetBytesPerPixel() const noexcept
+        {
+            return _bytesPerPixel;
         }
     };
 }
