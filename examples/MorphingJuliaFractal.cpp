@@ -104,7 +104,8 @@ int main()
                     pixelColor = Color{ r, g, b };
                 }
 
-                render.Pixel(x, y, pixelColor);
+                render.SetColor(pixelColor);
+                render.Pixel(x, y);
             }
         }
 

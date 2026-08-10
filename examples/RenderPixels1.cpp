@@ -58,29 +58,38 @@ int main()
             }
         }
 
-        render.Clear(backgroundColor);
+        render.SetColor(backgroundColor);
+        render.Clear();
 
+        render.SetColor(gridColor);
         for (int x = 0; x < static_cast<int>(width); x += 40)
         {
-            render.Line(x, 0, x, static_cast<int>(height), gridColor);
+            render.Line(x, 0, x, static_cast<int>(height));
         }
 
         for (int y = 0; y < static_cast<int>(height); y += 40)
         {
-            render.Line(0, y, static_cast<int>(width), y, gridColor);
+            render.Line(0, y, static_cast<int>(width), y);
         }
 
-        render.Fill(100, 100, 250, 180, rectColor);
-        render.Fill(450, 320, 200, 150, Color{ 60, 130, 240 });
+        render.SetColor(rectColor);
+        render.Fill(100, 100, 250, 180);
 
-        render.Line(40, 40, 760, 560, lineColor);
-        render.Line(760, 40, 40 + animationOffset, 560, Color{ 220, 80, 220 });
+        render.SetColor(Color{ 60, 130, 240 });
+        render.Fill(450, 320, 200, 150);
 
+        render.SetColor(Color{ 220, 80, 220 });
+        render.Line(40, 40, 760, 560);
+
+        render.SetColor(gridColor);
+        render.Line(760, 40, 40 + animationOffset, 560);
+
+        render.SetColor(pixelColor);
         for (int i = 0; i < 150; i += 4)
         {
             std::size_t px = static_cast<std::size_t>(300 + i);
             std::size_t py = static_cast<std::size_t>(200 + animationOffset / 4);
-            render.Pixel(px, py, pixelColor);
+            render.Pixel(px, py);
         }
 
         animationOffset = (animationOffset + 2) % 600;

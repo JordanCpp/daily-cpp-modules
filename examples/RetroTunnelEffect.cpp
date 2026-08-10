@@ -26,10 +26,11 @@ void DrawCenteredSquare(SoftwareRender& render, int centerX, int centerY, int si
     int x1 = centerX + half;
     int y1 = centerY + half;
 
-    render.Line(x0, y0, x1, y0, color);
-    render.Line(x0, y1, x1, y1, color);
-    render.Line(x0, y0, x0, y1, color);
-    render.Line(x1, y0, x1, y1, color);
+    render.SetColor(color);
+    render.Line(x0, y0, x1, y0);
+    render.Line(x0, y1, x1, y1);
+    render.Line(x0, y0, x0, y1);
+    render.Line(x1, y0, x1, y1);
 }
 
 int main()
@@ -72,7 +73,8 @@ int main()
             }
         }
 
-        render.Clear(Color{ 10, 5, 15 });
+        render.SetColor(Color{ 10, 5, 15 });
+        render.Clear();
 
         float motionOffset = std::fmod(time * 0.5f, 1.0f);
 

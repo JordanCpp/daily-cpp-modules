@@ -37,6 +37,7 @@ export namespace Software
     class SoftwareRender
     {
     private:
+        Color       _color;
         std::size_t _width;
         std::size_t _height;
         std::size_t _bytesPerPixel;
@@ -55,11 +56,16 @@ export namespace Software
             }
         }
 
-        constexpr void Clear(Color color) noexcept
+        constexpr void SetColor(Color color) noexcept
         {
-            if (color.r == color.g && color.g == color.b && (_bytesPerPixel == 3 || color.g == color.a))
+            _color = color;
+        }
+
+        constexpr void Clear() noexcept
+        {
+            if (_color.r == _color.g && _color.g == _color.b && (_bytesPerPixel == 3 || _color.g == _color.a))
             {
-                std::fill(_pixels.begin(), _pixels.end(), color.r);
+                std::fill(_pixels.begin(), _pixels.end(), _color.r);
                 return;
             }
 
@@ -67,24 +73,24 @@ export namespace Software
             {
                 for (std::size_t i = 0; i < _pixels.size(); i += 4)
                 {
-                    _pixels[i + 0] = color.r;
-                    _pixels[i + 1] = color.g;
-                    _pixels[i + 2] = color.b;
-                    _pixels[i + 3] = color.a;
+                    _pixels[i + 0] = _color.r;
+                    _pixels[i + 1] = _color.g;
+                    _pixels[i + 2] = _color.b;
+                    _pixels[i + 3] = _color.a;
                 }
             }
-            else if (_bytesPerPixel == 3)
+            else
             {
                 for (std::size_t i = 0; i < _pixels.size(); i += 3)
                 {
-                    _pixels[i + 0] = color.r;
-                    _pixels[i + 1] = color.g;
-                    _pixels[i + 2] = color.b;
+                    _pixels[i + 0] = _color.r;
+                    _pixels[i + 1] = _color.g;
+                    _pixels[i + 2] = _color.b;
                 }
             }
         }
 
-        constexpr void Pixel(std::size_t x, std::size_t y, Color color) noexcept
+        constexpr void Pixel(std::size_t x, std::size_t y) noexcept
         {
             if (x >= _width || y >= _height) [[unlikely]]
             {
@@ -93,20 +99,17 @@ export namespace Software
 
             const std::size_t index = (y * _width + x) * _bytesPerPixel;
 
-            if (index + _bytesPerPixel <= _pixels.size()) [[likely]]
-            {
-                _pixels[index + 0] = color.r;
-                _pixels[index + 1] = color.g;
-                _pixels[index + 2] = color.b;
+            _pixels[index + 0] = _color.r;
+            _pixels[index + 1] = _color.g;
+            _pixels[index + 2] = _color.b;
 
-                if (_bytesPerPixel == 4)
-                {
-                    _pixels[index + 3] = color.a;
-                }
+            if (_bytesPerPixel == 4)
+            {
+                _pixels[index + 3] = _color.a;
             }
         }
 
-        constexpr void Line(int x0, int y0, int x1, int y1, Color color) noexcept
+        constexpr void Line(int x0, int y0, int x1, int y1) noexcept
         {
             const int dx = std::abs(x1 - x0);
             const int dy = std::abs(y1 - y0);
@@ -117,9 +120,17 @@ export namespace Software
             while (true)
             {
                 if (x0 >= 0 && static_cast<std::size_t>(x0) < _width &&
-                    y0 >= 0 && static_cast<std::size_t>(y0) < _height)
+                    y0 >= 0 && static_cast<std::size_t>(y0) < _height) [[likely]]
                 {
-                    Pixel(static_cast<std::size_t>(x0), static_cast<std::size_t>(y0), color);
+                    const std::size_t index = (static_cast<std::size_t>(y0) * _width + static_cast<std::size_t>(x0)) * _bytesPerPixel;
+                    _pixels[index + 0] = _color.r;
+                    _pixels[index + 1] = _color.g;
+                    _pixels[index + 2] = _color.b;
+
+                    if (_bytesPerPixel == 4)
+                    {
+                        _pixels[index + 3] = _color.a;
+                    }
                 }
 
                 if (x0 == x1 && y0 == y1)
@@ -141,7 +152,7 @@ export namespace Software
             }
         }
 
-        constexpr void Fill(int x, int y, int width, int height, Color color) noexcept
+        constexpr void Fill(int x, int y, int width, int height) noexcept
         {
             if (width <= 0 || height <= 0) [[unlikely]]
             {
@@ -158,26 +169,40 @@ export namespace Software
                 return;
             }
 
-            for (std::size_t currY = y0; currY < y1; ++currY)
+            if (_bytesPerPixel == 4)
             {
-                std::size_t rowStart = (currY * _width + x0) * _bytesPerPixel;
-
-                for (std::size_t currX = x0; currX < x1; ++currX)
+                for (std::size_t currY = y0; currY < y1; ++currY)
                 {
-                    if (rowStart + _bytesPerPixel <= _pixels.size()) [[likely]]
+                    std::size_t rowStart = (currY * _width + x0) * 4;
+                    for (std::size_t currX = x0; currX < x1; ++currX)
                     {
-                        _pixels[rowStart + 0] = color.r;
-                        _pixels[rowStart + 1] = color.g;
-                        _pixels[rowStart + 2] = color.b;
-
-                        if (_bytesPerPixel == 4)
-                        {
-                            _pixels[rowStart + 3] = color.a;
-                        }
+                        _pixels[rowStart + 0] = _color.r;
+                        _pixels[rowStart + 1] = _color.g;
+                        _pixels[rowStart + 2] = _color.b;
+                        _pixels[rowStart + 3] = _color.a;
+                        rowStart += 4;
                     }
-                    rowStart += _bytesPerPixel;
                 }
             }
+            else
+            {
+                for (std::size_t currY = y0; currY < y1; ++currY)
+                {
+                    std::size_t rowStart = (currY * _width + x0) * 3;
+                    for (std::size_t currX = x0; currX < x1; ++currX)
+                    {
+                        _pixels[rowStart + 0] = _color.r;
+                        _pixels[rowStart + 1] = _color.g;
+                        _pixels[rowStart + 2] = _color.b;
+                        rowStart += 3;
+                    }
+                }
+            }
+        }
+
+        [[nodiscard]] constexpr Color GetColor() const noexcept
+        {
+            return _color;
         }
 
         [[nodiscard]] constexpr std::size_t GetWidth() const noexcept

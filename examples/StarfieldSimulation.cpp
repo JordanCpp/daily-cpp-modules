@@ -78,7 +78,8 @@ int main()
             }
         }
 
-        render.Clear(Color{ 10, 10, 15 });
+        render.SetColor(Color{ 10, 10, 15 });
+        render.Clear();
 
         for (auto& star : stars)
         {
@@ -117,7 +118,8 @@ int main()
             std::uint8_t g = brightness;
             std::uint8_t b = static_cast<std::uint8_t>(std::min(255.0f, brightness * 1.2f));
 
-            render.Pixel(px, py, Color{ r, g, b });
+            render.SetColor(Color{ r, g, b });
+            render.Pixel(px, py);
         }
 
         window.Present(frameBuffer.data(), bytesPerPixel, width, height);
