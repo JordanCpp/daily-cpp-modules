@@ -10,22 +10,23 @@ module;
 #include <expected>
 #include <fstream>
 #include <filesystem>
+#include <cmath>
 
 export module BmpLoader;
 
 export namespace BmpLoader
 {
 #pragma pack(push, 1)
-    struct BmpFileHeader 
+    struct BmpFileHeader
     {
         std::uint16_t type;
         std::uint32_t size;
         std::uint16_t reserved1;
         std::uint16_t reserved2;
         std::uint32_t offset_data;
-    } file_header;
+    };
 
-    struct BmpInfoHeader 
+    struct BmpInfoHeader
     {
         std::uint32_t size;
         std::int32_t  width;
@@ -38,18 +39,18 @@ export namespace BmpLoader
         std::int32_t  y_pixels_per_meter;
         std::uint32_t colors_used;
         std::uint32_t colors_important;
-    } info_header;
+    };
 #pragma pack(pop)
 
-    struct Image 
+    struct Image
     {
-        std::uint8_t  bpp   { 0 };
-        std::uint32_t width { 0 };
+        std::uint8_t  bpp{ 0 };
+        std::uint32_t width{ 0 };
         std::uint32_t height{ 0 };
         std::vector<std::uint8_t> pixels;
     };
 
-    enum class Error 
+    enum class Error
     {
         FileNotFound,
         InvalidFormat,
@@ -58,48 +59,53 @@ export namespace BmpLoader
         ReadError
     };
 
-    export std::expected<Image, Error> Load(const std::filesystem::path& path) noexcept 
+    std::expected<Image, Error> Load(const std::filesystem::path& path) noexcept
     {
         std::ifstream file(path, std::ios::binary);
-
-        if (!file.is_open()) 
+        if (!file.is_open())
         {
             return std::unexpected(Error::FileNotFound);
         }
 
+        BmpFileHeader file_header{};
+        BmpInfoHeader info_header{};
+
         if (!file.read(reinterpret_cast<char*>(&file_header), sizeof(file_header)) ||
-            !file.read(reinterpret_cast<char*>(&info_header), sizeof(info_header))) 
+            !file.read(reinterpret_cast<char*>(&info_header), sizeof(info_header)))
         {
             return std::unexpected(Error::CorruptedHeader);
         }
 
-        if (file_header.type != 0x4D42) 
+        if (file_header.type != 0x4D42)
         {
             return std::unexpected(Error::InvalidFormat);
         }
 
-        if (info_header.compression != 0 || (info_header.bit_count != 24 && info_header.bit_count != 32)) 
+        if (info_header.compression != 0 || (info_header.bit_count != 24 && info_header.bit_count != 32))
         {
             return std::unexpected(Error::UnsupportedBpp);
         }
 
-        const std::uint32_t width  = std::abs(info_header.width);
+        const std::uint32_t width = std::abs(info_header.width);
         const std::uint32_t height = std::abs(info_header.height);
-        const bool is_top_down     = info_header.height < 0;
+        const bool is_top_down = info_header.height < 0;
 
-        Image img{ .width = width, .height = height };
+        Image img{ .bpp = 4, .width = width, .height = height };
         img.pixels.resize(width * height * 4);
 
-        file.seekg(file_header.offset_data, std::ios::beg);
+        if (!file.seekg(file_header.offset_data, std::ios::beg))
+        {
+            return std::unexpected(Error::ReadError);
+        }
 
         const std::uint32_t bytes_per_pixel = info_header.bit_count / 8;
         const std::uint32_t row_stride = (width * bytes_per_pixel + 3) & ~3;
 
         std::vector<std::uint8_t> row_buffer(row_stride);
 
-        for (std::uint32_t y = 0; y < height; ++y) 
+        for (std::uint32_t y = 0; y < height; ++y)
         {
-            if (!file.read(reinterpret_cast<char*>(row_buffer.data()), row_stride)) 
+            if (!file.read(reinterpret_cast<char*>(row_buffer.data()), row_stride))
             {
                 return std::unexpected(Error::ReadError);
             }
@@ -120,14 +126,12 @@ export namespace BmpLoader
                 {
                     img.pixels[dst_idx + 3] = row_buffer[src_idx + 3];
                 }
-                else 
+                else
                 {
                     img.pixels[dst_idx + 3] = 255;
                 }
             }
         }
-
-        img.bpp = 4;
 
         return img;
     }
