@@ -13,7 +13,9 @@ if(WIN32)
     "WinLite.MainWindow.Win9x.ixx"
     "WinLite.SoftwareWindow.Win9x.ixx")
 else()
-    set(MODULE_FILE WinLite.MainWindow.Linux.ixx)
+    set(MODULE_FILE
+    "WinLite.MainWindow.Linux.ixx"
+    "WinLite.SoftwareWindow.Linux.ixx")
 endif()
 
 target_sources(WinLite PUBLIC FILE_SET CXX_MODULES FILES 
