@@ -50,7 +50,7 @@ int main()
         {
             const BmpLoader::Image& img = result.value();
 
-            render.Copy(0, 0, img.width, img.height, 4, img.pixels);
+            render.Copy(0, 0, img.width, img.height, img.bpp, img.pixels);
         }
 
         window.Present(frameBuffer.data(), bytesPerPixel, width, height);

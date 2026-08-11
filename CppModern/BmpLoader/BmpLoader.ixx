@@ -43,6 +43,7 @@ export namespace BmpLoader
 
     struct Image 
     {
+        std::uint8_t  bpp   { 0 };
         std::uint32_t width { 0 };
         std::uint32_t height{ 0 };
         std::vector<std::uint8_t> pixels;
@@ -125,6 +126,8 @@ export namespace BmpLoader
                 }
             }
         }
+
+        img.bpp = 4;
 
         return img;
     }
