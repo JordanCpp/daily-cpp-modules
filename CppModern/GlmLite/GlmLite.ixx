@@ -7,7 +7,7 @@ module;
 
 #include <math.h>
 
-export module glm_lite;
+export module GlmLite;
 
 export namespace glm
 {
