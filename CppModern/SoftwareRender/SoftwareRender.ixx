@@ -84,19 +84,19 @@ export namespace Software
             {
                 for (std::size_t i = 0; i < _pixels.size(); i += 4)
                 {
-                    _pixels[i + 0] = _color.r;
-                    _pixels[i + 1] = _color.g;
-                    _pixels[i + 2] = _color.b;
-                    _pixels[i + 3] = _color.a;
+                    _pixels[i + idxR] = _color.r;
+                    _pixels[i + idxG] = _color.g;
+                    _pixels[i + idxB] = _color.b;
+                    _pixels[i + idxA] = _color.a;
                 }
             }
             else
             {
                 for (std::size_t i = 0; i < _pixels.size(); i += 3)
                 {
-                    _pixels[i + 0] = _color.r;
-                    _pixels[i + 1] = _color.g;
-                    _pixels[i + 2] = _color.b;
+                    _pixels[i + idxR] = _color.r;
+                    _pixels[i + idxG] = _color.g;
+                    _pixels[i + idxB] = _color.b;
                 }
             }
         }
@@ -110,13 +110,13 @@ export namespace Software
 
             const std::size_t index = (y * _width + x) * _bytesPerPixel;
 
-            _pixels[index + 0] = _color.r;
-            _pixels[index + 1] = _color.g;
-            _pixels[index + 2] = _color.b;
+            _pixels[index + idxR] = _color.r;
+            _pixels[index + idxG] = _color.g;
+            _pixels[index + idxB] = _color.b;
 
             if (_bytesPerPixel == 4)
             {
-                _pixels[index + 3] = _color.a;
+                _pixels[index + idxA] = _color.a;
             }
         }
 
@@ -134,13 +134,13 @@ export namespace Software
                     y0 >= 0 && static_cast<std::size_t>(y0) < _height) [[likely]]
                 {
                     const std::size_t index = (static_cast<std::size_t>(y0) * _width + static_cast<std::size_t>(x0)) * _bytesPerPixel;
-                    _pixels[index + 0] = _color.r;
-                    _pixels[index + 1] = _color.g;
-                    _pixels[index + 2] = _color.b;
+                    _pixels[index + idxR] = _color.r;
+                    _pixels[index + idxG] = _color.g;
+                    _pixels[index + idxB] = _color.b;
 
                     if (_bytesPerPixel == 4)
                     {
-                        _pixels[index + 3] = _color.a;
+                        _pixels[index + idxA] = _color.a;
                     }
                 }
 
@@ -187,10 +187,10 @@ export namespace Software
                     std::size_t rowStart = (currY * _width + x0) * 4;
                     for (std::size_t currX = x0; currX < x1; ++currX)
                     {
-                        _pixels[rowStart + 0] = _color.r;
-                        _pixels[rowStart + 1] = _color.g;
-                        _pixels[rowStart + 2] = _color.b;
-                        _pixels[rowStart + 3] = _color.a;
+                        _pixels[rowStart + idxR] = _color.r;
+                        _pixels[rowStart + idxG] = _color.g;
+                        _pixels[rowStart + idxB] = _color.b;
+                        _pixels[rowStart + idxA] = _color.a;
                         rowStart += 4;
                     }
                 }
@@ -202,9 +202,9 @@ export namespace Software
                     std::size_t rowStart = (currY * _width + x0) * 3;
                     for (std::size_t currX = x0; currX < x1; ++currX)
                     {
-                        _pixels[rowStart + 0] = _color.r;
-                        _pixels[rowStart + 1] = _color.g;
-                        _pixels[rowStart + 2] = _color.b;
+                        _pixels[rowStart + idxR] = _color.r;
+                        _pixels[rowStart + idxG] = _color.g;
+                        _pixels[rowStart + idxB] = _color.b;
                         rowStart += 3;
                     }
                 }
@@ -264,9 +264,9 @@ export namespace Software
 
                 for (std::size_t col = 0; col < copyWidth; ++col)
                 {
-                    _pixels[destRowOffset + 0] = bufferSource[srcRowOffset + 0];
-                    _pixels[destRowOffset + 1] = bufferSource[srcRowOffset + 1];
-                    _pixels[destRowOffset + 2] = bufferSource[srcRowOffset + 2];
+                    _pixels[destRowOffset + idxR] = bufferSource[srcRowOffset + 0];
+                    _pixels[destRowOffset + idxG] = bufferSource[srcRowOffset + 1];
+                    _pixels[destRowOffset + idxB] = bufferSource[srcRowOffset + 2];
 
                     if (_bytesPerPixel == 4)
                     {
