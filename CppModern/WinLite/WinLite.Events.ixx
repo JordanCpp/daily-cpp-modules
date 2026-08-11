@@ -9,6 +9,8 @@ module;
 
 export module WinLite.Events;
 
+import WinLite.KeyEnums;
+
 export namespace WinLite
 {
 	enum class ButtonState : uint8_t
@@ -66,7 +68,7 @@ export namespace WinLite
 	public:
 		EventType   Type;
 		ButtonState State;
-		uint8_t     Key;
+		Key         Key;
 	};
 
 	class Resize
@@ -105,12 +107,12 @@ export namespace WinLite
 			LostFocus   LostFocus;
 		};
 
-		bool IsKeyPressed(uint8_t key) const
+		bool IsKeyPressed(Key key) const
 		{
 			return (Type == EventType::Keyboard && Keyboard.Key == key && Keyboard.State == ButtonState::Pressed);
 		}
 
-		bool IsKeyReleased(uint8_t key) const
+		bool IsKeyReleased(Key key) const
 		{
 			return (Type == EventType::Keyboard && Keyboard.Key == key && Keyboard.State == ButtonState::Released);
 		}

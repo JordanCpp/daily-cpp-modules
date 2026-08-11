@@ -17,8 +17,10 @@ else()
 endif()
 
 target_sources(WinLite PUBLIC FILE_SET CXX_MODULES FILES 
-    "WinLite.ixx" 
-    "WinLite.Events.ixx" 
+    "WinLite.ixx"
+    "WinLite.KeyEnums.ixx"
+    "WinLite.KeyMapper.ixx"
+    "WinLite.Events.ixx"
     "WinLite.Queue.ixx" ${MODULE_FILE})
 
 target_include_directories(WinLite INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)

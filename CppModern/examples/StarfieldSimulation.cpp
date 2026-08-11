@@ -72,7 +72,7 @@ int main()
         Event event;
         while (window.GetEvent(event))
         {
-            if (event.Type == EventType::Quit)
+            if ((event.Type == EventType::Quit) || event.IsKeyPressed(Key::Escape))
             {
                 window.StopEvent();
             }
