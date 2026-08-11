@@ -11,7 +11,7 @@ module;
 #include <algorithm>
 #include <stdexcept>
 
-export module SoftwareRender;
+export module Painter;
 
 export namespace Software
 {
@@ -45,7 +45,7 @@ export namespace Software
         }
     };
 
-    class SoftwareRender
+    class Painter
     {
     private:
         Color       _color;
@@ -55,7 +55,7 @@ export namespace Software
         std::span<std::uint8_t> _pixels;
 
     public:
-        constexpr SoftwareRender(std::size_t w, std::size_t h, std::size_t bytesPerPixel, std::span<std::uint8_t> pixels) :
+        constexpr Painter(std::size_t w, std::size_t h, std::size_t bytesPerPixel, std::span<std::uint8_t> pixels) :
             _width(w),
             _height(h),
             _bytesPerPixel(bytesPerPixel),
@@ -65,6 +65,26 @@ export namespace Software
             {
                 throw std::invalid_argument("Only 3 or 4 bytes per pixel are supported.");
             }
+        }
+
+        [[nodiscard]] constexpr Color GetColor() const noexcept
+        {
+            return _color;
+        }
+
+        [[nodiscard]] constexpr std::size_t GetWidth() const noexcept
+        {
+            return _width;
+        }
+
+        [[nodiscard]] constexpr std::size_t GetHeight() const noexcept
+        {
+            return _height;
+        }
+
+        [[nodiscard]] constexpr std::size_t GetBytesPerPixel() const noexcept
+        {
+            return _bytesPerPixel;
         }
 
         constexpr void SetColor(Color color) noexcept
@@ -211,24 +231,47 @@ export namespace Software
             }
         }
 
-        [[nodiscard]] constexpr Color GetColor() const noexcept
+        constexpr void Circle(int xc, int yc, int radius) noexcept
         {
-            return _color;
-        }
+            if (radius < 0) [[unlikely]]
+            {
+                return;
+            }
 
-        [[nodiscard]] constexpr std::size_t GetWidth() const noexcept
-        {
-            return _width;
-        }
+            int x = 0;
+            int y = radius;
+            int d = 3 - 2 * radius;
 
-        [[nodiscard]] constexpr std::size_t GetHeight() const noexcept
-        {
-            return _height;
-        }
+            auto drawEightPixels = [this, xc, yc](int x, int y) noexcept 
+                {
+                Pixel(static_cast<std::size_t>(xc + x), static_cast<std::size_t>(yc + y));
+                Pixel(static_cast<std::size_t>(xc - x), static_cast<std::size_t>(yc + y));
+                Pixel(static_cast<std::size_t>(xc + x), static_cast<std::size_t>(yc - y));
+                Pixel(static_cast<std::size_t>(xc - x), static_cast<std::size_t>(yc - y));
+                Pixel(static_cast<std::size_t>(xc + y), static_cast<std::size_t>(yc + x));
+                Pixel(static_cast<std::size_t>(xc - y), static_cast<std::size_t>(yc + x));
+                Pixel(static_cast<std::size_t>(xc + y), static_cast<std::size_t>(yc - x));
+                Pixel(static_cast<std::size_t>(xc - y), static_cast<std::size_t>(yc - x));
+                };
 
-        [[nodiscard]] constexpr std::size_t GetBytesPerPixel() const noexcept
-        {
-            return _bytesPerPixel;
+            drawEightPixels(x, y);
+
+            while (y >= x)
+            {
+                x++;
+
+                if (d > 0)
+                {
+                    y--;
+                    d = d + 4 * (x - y) + 10;
+                }
+                else
+                {
+                    d = d + 4 * x + 6;
+                }
+
+                drawEightPixels(x, y);
+            }
         }
 
         constexpr void Copy(int screenX, int screenY, std::size_t bufferWidth, std::size_t bufferHeight, std::size_t bufferBytesPerPixel, std::span<const std::uint8_t> bufferSource) noexcept
@@ -278,6 +321,5 @@ export namespace Software
                 }
             }
         }
-
     };
 }

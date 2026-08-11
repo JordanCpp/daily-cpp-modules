@@ -11,7 +11,7 @@
 #include <algorithm>
 
 import WinLite;
-import SoftwareRender;
+import Painter;
 
 using namespace WinLite;
 using namespace Software;
@@ -43,7 +43,7 @@ int main()
 
     SoftwareWindow window = std::move(*windowResult);
     std::vector<std::uint8_t> frameBuffer(width * height * bytesPerPixel);
-    SoftwareRender render(width, height, bytesPerPixel, std::span<std::uint8_t>(frameBuffer.data(), frameBuffer.size()));
+    Painter render(width, height, bytesPerPixel, std::span<std::uint8_t>(frameBuffer.data(), frameBuffer.size()));
 
     std::random_device rd;
     std::mt19937 gen(rd());
