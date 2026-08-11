@@ -2,6 +2,9 @@
 cmake_minimum_required(VERSION 3.28)
 project(DailyCppModulesExamples LANGUAGES CXX)
 
+add_executable(BmpTest "BmpTest.cpp")
+target_link_libraries(BmpTest PRIVATE WinLite SoftwareRender BmpLoader)
+
 add_executable(RenderPixels1 "RenderPixels1.cpp")
 target_link_libraries(RenderPixels1 PRIVATE WinLite SoftwareRender)
 
@@ -16,3 +19,5 @@ target_link_libraries(RetroTunnelEffect PRIVATE WinLite SoftwareRender)
 
 add_executable(MorphingJuliaFractal "MorphingJuliaFractal.cpp")
 target_link_libraries(MorphingJuliaFractal PRIVATE WinLite SoftwareRender)
+
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/files" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}") 
