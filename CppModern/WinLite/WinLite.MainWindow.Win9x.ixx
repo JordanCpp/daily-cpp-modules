@@ -298,6 +298,11 @@ export namespace WinLite
             return _events.IsRunning();
         }
 
+        HWND GetHwnd()
+        {
+            return _hwnd;
+        }
+
         HDC GetHdc()
         {
             return _hdc;

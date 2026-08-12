@@ -6421,7 +6421,7 @@ void* OpenGLLoader::get_proc_address(const char* name)
 
     if (!proc) 
     {
-        auto wglGetProcAddress = reinterpret_cast<void* (*)(const char*)>(
+        auto wglGetProcAddress = reinterpret_cast<void* (GL_CALL*)(const char*)>(
             GetProcAddress(opengl32, "wglGetProcAddress")
             );
 
