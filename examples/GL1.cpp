@@ -3,10 +3,12 @@
 // (See accompanying file LICENSE_1_0.txt or copy at
 // https://boost.org)
 
-#include <iostream>
+#include <print>
+#include <string>
 
 import WinLite;
 import OpenGL;
+import FpsCounter;
 
 using namespace WinLite;
 
@@ -33,7 +35,7 @@ int main()
 
     if (!windowResult)
     {
-        std::cout << "Error: " << windowResult.error() << std::endl;
+        std::println("Error: {}", windowResult.error());
         return -1;
     }
 
@@ -48,6 +50,8 @@ int main()
 
     glVertexPointer(3, GL_FLOAT, 0, vertices);
     glColorPointer(3, GL_FLOAT, 0, colors);
+
+    FpsCounter counter;
 
     while (window.IsRunning())
     {
@@ -66,6 +70,11 @@ int main()
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
         window.Present();
+
+        if (counter.Update())
+        {
+            window.SetTitle(std::to_string(counter.GetFps()));
+        }
     }
 
     glDisableClientState(GL_COLOR_ARRAY);

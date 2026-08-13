@@ -3,11 +3,13 @@
 // (See accompanying file LICENSE_1_0.txt or copy at
 // https://boost.org)
 
-#include <iostream>
+#include <print>
+#include <string>
 
 import WinLite;
 import Painter;
 import BmpLoader;
+import FpsCounter;
 
 using namespace WinLite;
 using namespace Software;
@@ -22,7 +24,7 @@ int main()
 
     if (!windowResult)
     {
-        std::cout << "Error: " << windowResult.error() << std::endl;
+        std::println("Error: {}", windowResult.error());
         return -1;
     }
 
@@ -31,6 +33,8 @@ int main()
     Painter render(width, height, bytesPerPixel, std::span<std::uint8_t>(frameBuffer.data(), frameBuffer.size()));
 
     auto result = BmpLoader::Load("files/LDL_24_256.bmp");
+
+    FpsCounter counter;
 
     while (window.IsRunning())
     {
@@ -54,6 +58,11 @@ int main()
         }
 
         window.Present(frameBuffer.data(), bytesPerPixel, width, height);
+
+        if (counter.Update())
+        {
+            window.SetTitle(std::to_string(counter.GetFps()));
+        }
     }
 
     return 0;

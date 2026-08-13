@@ -3,10 +3,10 @@ cmake_minimum_required(VERSION 3.28)
 project(DailyCppModulesExamples LANGUAGES CXX)
 
 add_executable(GL1 "GL1.cpp")
-target_link_libraries(GL1 PRIVATE WinLite OpenGL)
+target_link_libraries(GL1 PRIVATE WinLite OpenGL FpsCounter;)
 
 add_executable(BmpTest "BmpTest.cpp")
-target_link_libraries(BmpTest PRIVATE WinLite Painter BmpLoader)
+target_link_libraries(BmpTest PRIVATE WinLite Painter BmpLoader FpsCounter)
 
 add_executable(RenderPixels1 "RenderPixels1.cpp")
 target_link_libraries(RenderPixels1 PRIVATE WinLite Painter)

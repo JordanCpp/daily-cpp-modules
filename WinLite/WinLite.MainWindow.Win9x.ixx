@@ -298,6 +298,14 @@ export namespace WinLite
             return _events.IsRunning();
         }
 
+        void SetTitle(const std::string& title)
+        {
+            if (_hwnd)
+            {
+                SetWindowText(_hwnd, title.c_str());
+            }
+        }
+
         HWND GetHwnd()
         {
             return _hwnd;

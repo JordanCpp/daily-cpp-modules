@@ -65,6 +65,11 @@ export namespace WinLite
 			return _impl.GetEvent(event);
 		}
 
+		void SetTitle(const std::string& title)
+		{
+			_impl.SetTitle(title);
+		}
+
 		void Present(uint8_t* pixels, uint8_t bytes, int w, int h)
 		{
 			_bitmapInfo.bmiHeader.biSize        = sizeof(BITMAPINFOHEADER);

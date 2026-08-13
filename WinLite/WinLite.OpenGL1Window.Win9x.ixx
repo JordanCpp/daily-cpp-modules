@@ -152,6 +152,11 @@ export namespace WinLite
 			return _impl.GetEvent(event);
 		}
 
+		void SetTitle(const std::string& title)
+		{
+			_impl.SetTitle(title);
+		}
+
 		void Present() noexcept
 		{
 			if (_hdc)
