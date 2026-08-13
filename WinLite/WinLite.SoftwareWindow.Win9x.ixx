@@ -26,8 +26,12 @@ export namespace WinLite
 		MainWindow _impl;
 
 		explicit SoftwareWindow(MainWindow&& impl) :
-			_impl(std::move(impl)) 
+			_bitmapInfo{},
+			_impl(std::move(impl))
 		{
+			_bitmapInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+			_bitmapInfo.bmiHeader.biPlanes = 1;
+			_bitmapInfo.bmiHeader.biCompression = BI_RGB;
 		}
 
 	public:
@@ -48,11 +52,9 @@ export namespace WinLite
 			return SoftwareWindow(std::move(*result));
 		}
 
-		~SoftwareWindow()
-		{
-		}
+		~SoftwareWindow() = default;
 
-		bool IsRunning()
+		bool IsRunning() const
 		{
 			return _impl.IsRunning();
 		}
@@ -72,16 +74,13 @@ export namespace WinLite
 			_impl.SetTitle(title);
 		}
 
-		void Present(uint8_t* pixels, uint8_t bytes, int w, int h)
+		void Present(const uint8_t* pixels, uint8_t bytes, int w, int h)
 		{
-			_bitmapInfo.bmiHeader.biSize        = sizeof(BITMAPINFOHEADER);
-			_bitmapInfo.bmiHeader.biWidth       = (LONG)w;
-			_bitmapInfo.bmiHeader.biHeight      = -(LONG)h;
-			_bitmapInfo.bmiHeader.biPlanes      = 1;
-			_bitmapInfo.bmiHeader.biBitCount    = bytes * 8;
-			_bitmapInfo.bmiHeader.biCompression = BI_RGB;
-			
-			SetDIBitsToDevice(_impl.GetHdc(), 0, 0, (DWORD)w, (DWORD)h, 0, 0, 0, (UINT)h, pixels, &_bitmapInfo, DIB_RGB_COLORS);
+			_bitmapInfo.bmiHeader.biWidth    = static_cast<LONG>(w);
+			_bitmapInfo.bmiHeader.biHeight   = static_cast<LONG>(-h);
+			_bitmapInfo.bmiHeader.biBitCount = static_cast<WORD>(bytes * 8);
+
+			SetDIBitsToDevice(_impl.GetHdc(), 0, 0, static_cast<DWORD>(w), static_cast<DWORD>(h), 0, 0, 0, static_cast<UINT>(h), pixels, &_bitmapInfo, DIB_RGB_COLORS);
 		}
 	};
 }

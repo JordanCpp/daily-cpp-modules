@@ -56,6 +56,7 @@ export namespace Software
 
     public:
         constexpr Painter(std::size_t w, std::size_t h, std::size_t bytesPerPixel, std::span<std::uint8_t> pixels) :
+            _color{},
             _width(w),
             _height(h),
             _bytesPerPixel(bytesPerPixel),
@@ -242,16 +243,16 @@ export namespace Software
             int y = radius;
             int d = 3 - 2 * radius;
 
-            auto drawEightPixels = [this, xc, yc](int x, int y) noexcept 
+            auto drawEightPixels = [this, xc, yc](int px, int py) noexcept 
                 {
-                Pixel(static_cast<std::size_t>(xc + x), static_cast<std::size_t>(yc + y));
-                Pixel(static_cast<std::size_t>(xc - x), static_cast<std::size_t>(yc + y));
-                Pixel(static_cast<std::size_t>(xc + x), static_cast<std::size_t>(yc - y));
-                Pixel(static_cast<std::size_t>(xc - x), static_cast<std::size_t>(yc - y));
-                Pixel(static_cast<std::size_t>(xc + y), static_cast<std::size_t>(yc + x));
-                Pixel(static_cast<std::size_t>(xc - y), static_cast<std::size_t>(yc + x));
-                Pixel(static_cast<std::size_t>(xc + y), static_cast<std::size_t>(yc - x));
-                Pixel(static_cast<std::size_t>(xc - y), static_cast<std::size_t>(yc - x));
+                Pixel(static_cast<std::size_t>(xc + px), static_cast<std::size_t>(yc + py));
+                Pixel(static_cast<std::size_t>(xc - px), static_cast<std::size_t>(yc + py));
+                Pixel(static_cast<std::size_t>(xc + px), static_cast<std::size_t>(yc - py));
+                Pixel(static_cast<std::size_t>(xc - px), static_cast<std::size_t>(yc - py));
+                Pixel(static_cast<std::size_t>(xc + py), static_cast<std::size_t>(yc + px));
+                Pixel(static_cast<std::size_t>(xc - py), static_cast<std::size_t>(yc + px));
+                Pixel(static_cast<std::size_t>(xc + py), static_cast<std::size_t>(yc - px));
+                Pixel(static_cast<std::size_t>(xc - py), static_cast<std::size_t>(yc - px));
                 };
 
             drawEightPixels(x, y);

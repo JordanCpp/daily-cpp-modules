@@ -22,7 +22,8 @@ export namespace WinLite
 
 	public:
 		Queue() :
-			_running(true)
+			_running(true),
+			_events{}
 		{
 		}
 

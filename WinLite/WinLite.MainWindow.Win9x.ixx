@@ -213,7 +213,8 @@ export namespace WinLite
         MainWindow(MainWindow&& other) noexcept : 
             _hwnd(other._hwnd), 
             _hdc(other._hdc),
-            _events(std::move(other._events))
+            _events(std::move(other._events)),
+            _keyMapper{}
         {
             other._hwnd = nullptr;
             other._hdc  = nullptr;
@@ -247,6 +248,8 @@ export namespace WinLite
                 _hwnd       = other._hwnd;
                 _hdc        = other._hdc;
                 _events     = std::move(other._events);
+                _keyMapper  = std::move(other._keyMapper);
+
                 other._hwnd = nullptr;
                 other._hdc  = nullptr;
 
@@ -265,9 +268,9 @@ export namespace WinLite
 
         void PollEvents()
         {
-            MSG msg;
+            MSG msg{};
 
-            while (PeekMessageA(&msg, nullptr, 0, 0, PM_REMOVE))
+            while (PeekMessageA(&msg, _hwnd, 0, 0, PM_REMOVE))
             {
                 TranslateMessage(&msg);
                 DispatchMessageA(&msg);
@@ -329,39 +332,37 @@ export namespace WinLite
         KeyMapper _keyMapper;
 
         explicit MainWindow(HWND hwnd) : 
-            _hwnd(hwnd) 
+            _hwnd(hwnd),
+            _hdc{},
+            _events{},
+            _keyMapper{}
         {
         }
 
         LRESULT CALLBACK Handler(UINT message, WPARAM WParam, LPARAM LParam)
         {
-            Event event = {};
-
-            ZeroMemory(&event, sizeof(event));
+            Event event{};
 
             switch (message)
             {
             case WM_PAINT:
-                break;
-
-            case WM_DESTROY:
-                break;
+                ValidateRect(_hwnd, nullptr);
+                return 0;
 
             case WM_MOUSEMOVE:
-                event.Type       = EventType::MouseMove;
-                event.Mouse.PosX = LOWORD(LParam);
-                event.Mouse.PosY = HIWORD(LParam);
+                event.Type = EventType::MouseMove;
+                event.Mouse.PosX = static_cast<short>(LOWORD(LParam));
+                event.Mouse.PosY = static_cast<short>(HIWORD(LParam));
                 _events.Push(event);
-                break;
+                return 0;
 
             case WM_LBUTTONDOWN: case WM_LBUTTONUP:
             case WM_RBUTTONDOWN: case WM_RBUTTONUP:
             case WM_MBUTTONDOWN: case WM_MBUTTONUP:
             {
-                event.Type       = EventType::MouseClick;
-                event.Mouse.PosX = LOWORD(LParam);
-                event.Mouse.PosY = HIWORD(LParam);
-
+                event.Type = EventType::MouseClick;
+                event.Mouse.PosX = static_cast<short>(LOWORD(LParam));
+                event.Mouse.PosY = static_cast<short>(HIWORD(LParam));
                 event.Mouse.State = (message == WM_LBUTTONDOWN || message == WM_RBUTTONDOWN || message == WM_MBUTTONDOWN) ? ButtonState::Pressed : ButtonState::Released;
 
                 if (message == WM_LBUTTONDOWN || message == WM_LBUTTONUP)
@@ -378,7 +379,7 @@ export namespace WinLite
                 }
 
                 _events.Push(event);
-                break;
+                return 0;
             }
 
             case WM_SIZE:
@@ -386,51 +387,63 @@ export namespace WinLite
                 event.Resize.Width = LOWORD(LParam);
                 event.Resize.Height = HIWORD(LParam);
                 _events.Push(event);
-                break;
+                return 0;
 
             case WM_CLOSE:
                 event.Type = EventType::Quit;
                 _events.Push(event);
+                DestroyWindow(_hwnd);
+                return 0;
+
+            case WM_DESTROY:
                 PostQuitMessage(0);
-                break;
+                return 0;
 
             case WM_KEYDOWN:
             case WM_SYSKEYDOWN:
-                event.Type           = EventType::Keyboard;
+                event.Type = EventType::Keyboard;
                 event.Keyboard.State = ButtonState::Pressed;
-                event.Keyboard.Key   = _keyMapper.FindKey(WParam);
+                event.Keyboard.Key = _keyMapper.FindKey(WParam);
                 _events.Push(event);
-                break;
+                return 0;
 
             case WM_KEYUP:
             case WM_SYSKEYUP:
-                event.Type           = EventType::Keyboard;
+                event.Type = EventType::Keyboard;
                 event.Keyboard.State = ButtonState::Released;
-                event.Keyboard.Key   = _keyMapper.FindKey(WParam);
+                event.Keyboard.Key = _keyMapper.FindKey(WParam);
                 _events.Push(event);
-                break;
+                return 0;
 
             case WM_SETFOCUS:
                 event.Type = EventType::GainedFocus;
                 _events.Push(event);
-                break;
+                return 0;
 
             case WM_KILLFOCUS:
                 event.Type = EventType::LostFocus;
                 _events.Push(event);
-                break;
+                return 0;
 
             case WM_MOUSEWHEEL:
             case WM_MOUSEHWHEEL:
             {
                 event.Type = EventType::MouseScroll;
-                event.Mouse.PosX = LOWORD(LParam);
-                event.Mouse.PosY = HIWORD(LParam);
                 event.Mouse.Delta = static_cast<short>(HIWORD(WParam));
                 event.Mouse.Scroll = (message == WM_MOUSEWHEEL) ? MouseScroll::Vertical : MouseScroll::Horizontal;
+
+                POINT pt{ static_cast<LONG>(static_cast<short>(LOWORD(LParam))),static_cast<LONG>(static_cast<short>(HIWORD(LParam))) };
+                ScreenToClient(_hwnd, &pt);
+
+                event.Mouse.PosX = static_cast<short>(pt.x);
+                event.Mouse.PosY = static_cast<short>(pt.y);
+
                 _events.Push(event);
-                break;
+                return 0;
             }
+
+            default:
+                break;
             }
 
             return DefWindowProcA(_hwnd, message, WParam, LParam);

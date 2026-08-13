@@ -88,16 +88,16 @@ export namespace WinLite
 			MainWindow windowImpl = std::move(*result);
 			HWND hwnd = windowImpl.GetHwnd();
 
-			HDC hdc = GetDC(hwnd);
+			HDC hdc = windowImpl.GetHdc();
 			if (!hdc)
 			{
-				return std::unexpected("Failed to get device context (HDC)");
+				return std::unexpected("Failed to get device context (HDC) from MainWindow");
 			}
 
 			PIXELFORMATDESCRIPTOR pfd{};
-			pfd.nSize      = sizeof(pfd);
-			pfd.nVersion   = 1;
-			pfd.dwFlags    = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+			pfd.nSize = sizeof(pfd);
+			pfd.nVersion = 1;
+			pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
 			pfd.iPixelType = PFD_TYPE_RGBA;
 			pfd.cColorBits = 24;
 			pfd.cDepthBits = 16;
@@ -106,27 +106,23 @@ export namespace WinLite
 			int format = ChoosePixelFormat(hdc, &pfd);
 			if (format == 0)
 			{
-				ReleaseDC(hwnd, hdc);
 				return std::unexpected("Failed to choose pixel format");
 			}
 
 			if (!SetPixelFormat(hdc, format, &pfd))
 			{
-				ReleaseDC(hwnd, hdc);
 				return std::unexpected("Failed to set pixel format");
 			}
 
 			HGLRC hglrc = wglCreateContext(hdc);
 			if (!hglrc)
 			{
-				ReleaseDC(hwnd, hdc);
 				return std::unexpected("Failed to create OpenGL context");
 			}
 
 			if (!wglMakeCurrent(hdc, hglrc))
 			{
 				wglDeleteContext(hglrc);
-				ReleaseDC(hwnd, hdc);
 				return std::unexpected("Failed to make OpenGL context current");
 			}
 
