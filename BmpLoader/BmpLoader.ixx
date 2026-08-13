@@ -91,7 +91,7 @@ export namespace BmpLoader
         const std::uint32_t height = std::abs(info_header.height);
         const bool is_top_down = info_header.height < 0;
 
-        Image img{ .bpp = 4, .width = width, .height = height };
+        Image img{ .bpp = 4, .width = width, .height = height, .pixels = {} };
         img.pixels.resize(width * height * 4);
 
         if (!file.seekg(file_header.offset_data, std::ios::beg))

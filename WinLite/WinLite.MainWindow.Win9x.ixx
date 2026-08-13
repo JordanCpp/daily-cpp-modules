@@ -131,7 +131,8 @@ export namespace WinLite
                 return std::unexpected("GetModuleHandleA failed");
             }
 
-            WNDCLASSEXA windowClass   = { sizeof(WNDCLASSEXA) };
+            WNDCLASSEXA windowClass{};
+            windowClass.cbSize        = sizeof(WNDCLASSEXA);
             windowClass.hInstance     = instance;
             windowClass.lpszClassName = ClassName;
             windowClass.lpfnWndProc   = WndProc;

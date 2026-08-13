@@ -6,6 +6,7 @@
 
 module;
 
+#include <bit>
 #include <utility>
 #include <cstdint>
 #include <expected>
@@ -6381,31 +6382,31 @@ private:
     {
         int major;
         int minor;
-        void (*loader)(OpenGLLoader*);
+        void (*loader)();
     };
 
     void load_functions(int major, int minor);
     static void* get_proc_address(const char* name);
 
-    static void load_version_1_0(OpenGLLoader* loader);
-    static void load_version_1_1(OpenGLLoader* loader);
-    static void load_version_1_2(OpenGLLoader* loader);
-    static void load_version_1_3(OpenGLLoader* loader);
-    static void load_version_1_4(OpenGLLoader* loader);
-    static void load_version_1_5(OpenGLLoader* loader);
-    static void load_version_2_0(OpenGLLoader* loader);
-    static void load_version_2_1(OpenGLLoader* loader);
-    static void load_version_3_0(OpenGLLoader* loader);
-    static void load_version_3_1(OpenGLLoader* loader);
-    static void load_version_3_2(OpenGLLoader* loader);
-    static void load_version_3_3(OpenGLLoader* loader);
-    static void load_version_4_0(OpenGLLoader* loader);
-    static void load_version_4_1(OpenGLLoader* loader);
-    static void load_version_4_2(OpenGLLoader* loader);
-    static void load_version_4_3(OpenGLLoader* loader);
-    static void load_version_4_4(OpenGLLoader* loader);
-    static void load_version_4_5(OpenGLLoader* loader);
-    static void load_version_4_6(OpenGLLoader* loader);
+    static void load_version_1_0();
+    static void load_version_1_1();
+    static void load_version_1_2();
+    static void load_version_1_3();
+    static void load_version_1_4();
+    static void load_version_1_5();
+    static void load_version_2_0();
+    static void load_version_2_1();
+    static void load_version_3_0();
+    static void load_version_3_1();
+    static void load_version_3_2();
+    static void load_version_3_3();
+    static void load_version_4_0();
+    static void load_version_4_1();
+    static void load_version_4_2();
+    static void load_version_4_3();
+    static void load_version_4_4();
+    static void load_version_4_5();
+    static void load_version_4_6();
 
     bool m_loaded{ false };
     int m_major{ 0 };
@@ -6422,9 +6423,9 @@ void* OpenGLLoader::get_proc_address(const char* name)
 
     if (!proc) 
     {
-        auto wglGetProcAddress = reinterpret_cast<void* (GL_CALL*)(const char*)>(
-            GetProcAddress(opengl32, "wglGetProcAddress")
-            );
+        auto wglGetProcAddress = std::bit_cast<void* (GL_CALL*)(const char*)>(
+            reinterpret_cast<void*>(GetProcAddress(opengl32, "wglGetProcAddress"))
+        );
 
         if (wglGetProcAddress) 
         {
@@ -6485,7 +6486,7 @@ void OpenGLLoader::load_functions(int major, int minor)
 
         if ((entry.major < major) || (entry.major == major && entry.minor <= minor))
         {
-            entry.loader(this);
+            entry.loader();
         }
     }
 
@@ -6494,7 +6495,7 @@ void OpenGLLoader::load_functions(int major, int minor)
 
 // ==================== OpenGL 1.0 Functions ====================
 
-void OpenGLLoader::load_version_1_0(OpenGLLoader* loader)
+void OpenGLLoader::load_version_1_0()
 {
     glCullFace = reinterpret_cast<PFNGLCULLFACEPROC>(get_proc_address("glCullFace"));
     glFrontFace = reinterpret_cast<PFNGLFRONTFACEPROC>(get_proc_address("glFrontFace"));
@@ -6806,7 +6807,7 @@ void OpenGLLoader::load_version_1_0(OpenGLLoader* loader)
 
 // ==================== OpenGL 1.1 Functions ====================
 
-void OpenGLLoader::load_version_1_1(OpenGLLoader* loader)
+void OpenGLLoader::load_version_1_1()
 {
     glDrawArrays = reinterpret_cast<PFNGLDRAWARRAYSPROC>(get_proc_address("glDrawArrays"));
     glDrawElements = reinterpret_cast<PFNGLDRAWELEMENTSPROC>(get_proc_address("glDrawElements"));
@@ -6842,7 +6843,7 @@ void OpenGLLoader::load_version_1_1(OpenGLLoader* loader)
 
 // ==================== OpenGL 1.2 Functions ====================
 
-void OpenGLLoader::load_version_1_2(OpenGLLoader* loader)
+void OpenGLLoader::load_version_1_2()
 {
     glDrawRangeElements = reinterpret_cast<PFNGLDRAWRANGEELEMENTSPROC>(get_proc_address("glDrawRangeElements"));
     glTexImage3D = reinterpret_cast<PFNGLTEXIMAGE3DPROC>(get_proc_address("glTexImage3D"));
@@ -6852,7 +6853,7 @@ void OpenGLLoader::load_version_1_2(OpenGLLoader* loader)
 
 // ==================== OpenGL 1.3 Functions ====================
 
-void OpenGLLoader::load_version_1_3(OpenGLLoader* loader)
+void OpenGLLoader::load_version_1_3()
 {
     glActiveTexture = reinterpret_cast<PFNGLACTIVETEXTUREPROC>(get_proc_address("glActiveTexture"));
     glSampleCoverage = reinterpret_cast<PFNGLSAMPLECOVERAGEPROC>(get_proc_address("glSampleCoverage"));
@@ -6904,7 +6905,7 @@ void OpenGLLoader::load_version_1_3(OpenGLLoader* loader)
 
 // ==================== OpenGL 1.4 Functions ====================
 
-void OpenGLLoader::load_version_1_4(OpenGLLoader* loader)
+void OpenGLLoader::load_version_1_4()
 {
     glBlendFuncSeparate = reinterpret_cast<PFNGLBLENDFUNCSEPARATEPROC>(get_proc_address("glBlendFuncSeparate"));
     glMultiDrawArrays = reinterpret_cast<PFNGLMULTIDRAWARRAYSPROC>(get_proc_address("glMultiDrawArrays"));
@@ -6957,7 +6958,7 @@ void OpenGLLoader::load_version_1_4(OpenGLLoader* loader)
 
 // ==================== OpenGL 1.5 Functions ====================
 
-void OpenGLLoader::load_version_1_5(OpenGLLoader* loader)
+void OpenGLLoader::load_version_1_5()
 {
     glGenQueries = reinterpret_cast<PFNGLGENQUERIESPROC>(get_proc_address("glGenQueries"));
     glDeleteQueries = reinterpret_cast<PFNGLDELETEQUERIESPROC>(get_proc_address("glDeleteQueries"));
@@ -6982,7 +6983,7 @@ void OpenGLLoader::load_version_1_5(OpenGLLoader* loader)
 
 // ==================== OpenGL 2.0 Functions ====================
 
-void OpenGLLoader::load_version_2_0(OpenGLLoader* loader)
+void OpenGLLoader::load_version_2_0()
 {
     glBlendEquationSeparate = reinterpret_cast<PFNGLBLENDEQUATIONSEPARATEPROC>(get_proc_address("glBlendEquationSeparate"));
     glDrawBuffers = reinterpret_cast<PFNGLDRAWBUFFERSPROC>(get_proc_address("glDrawBuffers"));
@@ -7081,7 +7082,7 @@ void OpenGLLoader::load_version_2_0(OpenGLLoader* loader)
 
 // ==================== OpenGL 2.1 Functions ====================
 
-void OpenGLLoader::load_version_2_1(OpenGLLoader* loader)
+void OpenGLLoader::load_version_2_1()
 {
     glUniformMatrix2x3fv = reinterpret_cast<PFNGLUNIFORMMATRIX2X3FVPROC>(get_proc_address("glUniformMatrix2x3fv"));
     glUniformMatrix3x2fv = reinterpret_cast<PFNGLUNIFORMMATRIX3X2FVPROC>(get_proc_address("glUniformMatrix3x2fv"));
@@ -7093,7 +7094,7 @@ void OpenGLLoader::load_version_2_1(OpenGLLoader* loader)
 
 // ==================== OpenGL 3.0 Functions ====================
 
-void OpenGLLoader::load_version_3_0(OpenGLLoader* loader)
+void OpenGLLoader::load_version_3_0()
 {
     glColorMaski = reinterpret_cast<PFNGLCOLORMASKIPROC>(get_proc_address("glColorMaski"));
     glGetBooleani_v = reinterpret_cast<PFNGLGETBOOLEANI_VPROC>(get_proc_address("glGetBooleani_v"));
@@ -7183,7 +7184,7 @@ void OpenGLLoader::load_version_3_0(OpenGLLoader* loader)
 
 // ==================== OpenGL 3.1 Functions ====================
 
-void OpenGLLoader::load_version_3_1(OpenGLLoader* loader)
+void OpenGLLoader::load_version_3_1()
 {
     glDrawArraysInstanced = reinterpret_cast<PFNGLDRAWARRAYSINSTANCEDPROC>(get_proc_address("glDrawArraysInstanced"));
     glDrawElementsInstanced = reinterpret_cast<PFNGLDRAWELEMENTSINSTANCEDPROC>(get_proc_address("glDrawElementsInstanced"));
@@ -7201,7 +7202,7 @@ void OpenGLLoader::load_version_3_1(OpenGLLoader* loader)
 
 // ==================== OpenGL 3.2 Functions ====================
 
-void OpenGLLoader::load_version_3_2(OpenGLLoader* loader)
+void OpenGLLoader::load_version_3_2()
 {
     glDrawElementsBaseVertex = reinterpret_cast<PFNGLDRAWELEMENTSBASEVERTEXPROC>(get_proc_address("glDrawElementsBaseVertex"));
     glDrawRangeElementsBaseVertex = reinterpret_cast<PFNGLDRAWRANGEELEMENTSBASEVERTEXPROC>(get_proc_address("glDrawRangeElementsBaseVertex"));
@@ -7226,7 +7227,7 @@ void OpenGLLoader::load_version_3_2(OpenGLLoader* loader)
 
 // ==================== OpenGL 3.3 Functions ====================
 
-void OpenGLLoader::load_version_3_3(OpenGLLoader* loader)
+void OpenGLLoader::load_version_3_3()
 {
     glBindFragDataLocationIndexed = reinterpret_cast<PFNGLBINDFRAGDATALOCATIONINDEXEDPROC>(get_proc_address("glBindFragDataLocationIndexed"));
     glGetFragDataIndex = reinterpret_cast<PFNGLGETFRAGDATAINDEXPROC>(get_proc_address("glGetFragDataIndex"));
@@ -7290,7 +7291,7 @@ void OpenGLLoader::load_version_3_3(OpenGLLoader* loader)
 
 // ==================== OpenGL 4.0 Functions ====================
 
-void OpenGLLoader::load_version_4_0(OpenGLLoader* loader)
+void OpenGLLoader::load_version_4_0()
 {
     glMinSampleShading = reinterpret_cast<PFNGLMINSAMPLESHADINGPROC>(get_proc_address("glMinSampleShading"));
     glBlendEquationi = reinterpret_cast<PFNGLBLENDEQUATIONIPROC>(get_proc_address("glBlendEquationi"));
@@ -7342,7 +7343,7 @@ void OpenGLLoader::load_version_4_0(OpenGLLoader* loader)
 
 // ==================== OpenGL 4.1 Functions ====================
 
-void OpenGLLoader::load_version_4_1(OpenGLLoader* loader)
+void OpenGLLoader::load_version_4_1()
 {
     glReleaseShaderCompiler = reinterpret_cast<PFNGLRELEASESHADERCOMPILERPROC>(get_proc_address("glReleaseShaderCompiler"));
     glShaderBinary = reinterpret_cast<PFNGLSHADERBINARYPROC>(get_proc_address("glShaderBinary"));
@@ -7436,7 +7437,7 @@ void OpenGLLoader::load_version_4_1(OpenGLLoader* loader)
 
 // ==================== OpenGL 4.2 Functions ====================
 
-void OpenGLLoader::load_version_4_2(OpenGLLoader* loader)
+void OpenGLLoader::load_version_4_2()
 {
     glDrawArraysInstancedBaseInstance = reinterpret_cast<PFNGLDRAWARRAYSINSTANCEDBASEINSTANCEPROC>(get_proc_address("glDrawArraysInstancedBaseInstance"));
     glDrawElementsInstancedBaseInstance = reinterpret_cast<PFNGLDRAWELEMENTSINSTANCEDBASEINSTANCEPROC>(get_proc_address("glDrawElementsInstancedBaseInstance"));
@@ -7454,7 +7455,7 @@ void OpenGLLoader::load_version_4_2(OpenGLLoader* loader)
 
 // ==================== OpenGL 4.3 Functions ====================
 
-void OpenGLLoader::load_version_4_3(OpenGLLoader* loader)
+void OpenGLLoader::load_version_4_3()
 {
     glClearBufferData = reinterpret_cast<PFNGLCLEARBUFFERDATAPROC>(get_proc_address("glClearBufferData"));
     glClearBufferSubData = reinterpret_cast<PFNGLCLEARBUFFERSUBDATAPROC>(get_proc_address("glClearBufferSubData"));
@@ -7503,7 +7504,7 @@ void OpenGLLoader::load_version_4_3(OpenGLLoader* loader)
 
 // ==================== OpenGL 4.4 Functions ====================
 
-void OpenGLLoader::load_version_4_4(OpenGLLoader* loader)
+void OpenGLLoader::load_version_4_4()
 {
     glBufferStorage = reinterpret_cast<PFNGLBUFFERSTORAGEPROC>(get_proc_address("glBufferStorage"));
     glClearTexImage = reinterpret_cast<PFNGLCLEARTEXIMAGEPROC>(get_proc_address("glClearTexImage"));
@@ -7518,7 +7519,7 @@ void OpenGLLoader::load_version_4_4(OpenGLLoader* loader)
 
 // ==================== OpenGL 4.5 Functions ====================
 
-void OpenGLLoader::load_version_4_5(OpenGLLoader* loader)
+void OpenGLLoader::load_version_4_5()
 {
     glClipControl = reinterpret_cast<PFNGLCLIPCONTROLPROC>(get_proc_address("glClipControl"));
     glCreateTransformFeedbacks = reinterpret_cast<PFNGLCREATETRANSFORMFEEDBACKSPROC>(get_proc_address("glCreateTransformFeedbacks"));
@@ -7646,7 +7647,7 @@ void OpenGLLoader::load_version_4_5(OpenGLLoader* loader)
 
 // ==================== OpenGL 4.6 Functions ====================
 
-void OpenGLLoader::load_version_4_6(OpenGLLoader* loader)
+void OpenGLLoader::load_version_4_6()
 {
     glSpecializeShader = reinterpret_cast<PFNGLSPECIALIZESHADERPROC>(get_proc_address("glSpecializeShader"));
     glMultiDrawArraysIndirectCount = reinterpret_cast<PFNGLMULTIDRAWARRAYSINDIRECTCOUNTPROC>(get_proc_address("glMultiDrawArraysIndirectCount"));

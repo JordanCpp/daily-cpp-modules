@@ -80,8 +80,8 @@ export namespace WinLite
 			_bitmapInfo.bmiHeader.biPlanes      = 1;
 			_bitmapInfo.bmiHeader.biBitCount    = bytes * 8;
 			_bitmapInfo.bmiHeader.biCompression = BI_RGB;
-
-			int result = SetDIBitsToDevice(_impl.GetHdc(), 0, 0, (DWORD)w, (DWORD)h, 0, 0, 0, (UINT)h, pixels, &_bitmapInfo, DIB_RGB_COLORS);
+			
+			SetDIBitsToDevice(_impl.GetHdc(), 0, 0, (DWORD)w, (DWORD)h, 0, 0, 0, (UINT)h, pixels, &_bitmapInfo, DIB_RGB_COLORS);
 		}
 	};
 }

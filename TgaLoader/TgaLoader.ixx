@@ -87,7 +87,7 @@ export namespace TgaLoader
 
         const bool is_top_down = (header.image_descriptor & 0x20) != 0;
 
-        Image img{ .width = width, .height = height };
+        Image img{ .bpp = 4, .width = width, .height = height, .pixels = {} };
         img.pixels.resize(width * height * 4);
 
         const std::uint32_t bytes_per_pixel = header.bits_per_pixel / 8;
