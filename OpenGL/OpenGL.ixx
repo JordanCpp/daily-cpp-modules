@@ -6,6 +6,7 @@
 
 module;
 
+#include <utility>
 #include <cstdint>
 #include <expected>
 #include <Windows.h>
@@ -1495,7 +1496,7 @@ export constexpr GLenum GL_ALREADY_SIGNALED = 0x911A;
 export constexpr GLenum GL_TIMEOUT_EXPIRED = 0x911B;
 export constexpr GLenum GL_CONDITION_SATISFIED = 0x911C;
 export constexpr GLenum GL_WAIT_FAILED = 0x911D;
-export constexpr GLenum GL_TIMEOUT_IGNORED = 0xFFFFFFFFFFFFFFFF;
+export constexpr GLenum GL_TIMEOUT_IGNORED = 0xFFFFFFFF;
 export constexpr GLenum GL_SYNC_FLUSH_COMMANDS_BIT = 0x00000001;
 
 // ==================== Текстурные свойства ====================

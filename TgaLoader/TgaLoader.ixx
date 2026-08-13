@@ -49,7 +49,7 @@ export namespace TgaLoader
         ReadError
     };
 
-    export std::expected<Image, Error> load_from_file(const std::filesystem::path& path) noexcept 
+    std::expected<Image, Error> load_from_file(const std::filesystem::path& path) noexcept 
     {
         std::ifstream file(path, std::ios::binary);
         if (!file.is_open()) 

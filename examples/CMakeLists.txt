@@ -8,6 +8,11 @@ target_link_libraries(GL1 PRIVATE WinLite OpenGL FpsCounter;)
 add_executable(BmpTest "BmpTest.cpp")
 target_link_libraries(BmpTest PRIVATE WinLite Painter BmpLoader FpsCounter)
 
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    target_link_libraries(GL1 PRIVATE stdc++exp)
+    target_link_libraries(BmpTest PRIVATE stdc++exp)
+endif()
+
 add_executable(RenderPixels1 "RenderPixels1.cpp")
 target_link_libraries(RenderPixels1 PRIVATE WinLite Painter)
 

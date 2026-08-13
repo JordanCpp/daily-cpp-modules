@@ -5,6 +5,8 @@
 
 module;
 
+#include <memory_resource>
+#include <cstdint>
 #include <string>
 #include <utility>
 #include <expected>

@@ -15,7 +15,7 @@ export module Painter;
 
 export namespace Software
 {
-    inline constexpr std::uint8_t alpha = 255;
+    inline constexpr std::uint8_t alphaByte = 255;
 
 #if defined(_WIN32) || defined(__CYGWIN__)
     inline constexpr std::size_t idxR = 2;
@@ -33,10 +33,10 @@ export namespace Software
         std::uint8_t r{ 0 };
         std::uint8_t g{ 0 };
         std::uint8_t b{ 0 };
-        std::uint8_t a{ alpha };
+        std::uint8_t a{ alphaByte };
 
         constexpr Color() noexcept = default;
-        constexpr Color(std::uint8_t red, std::uint8_t green, std::uint8_t blue, std::uint8_t alpha = alpha) noexcept :
+        constexpr Color(std::uint8_t red, std::uint8_t green, std::uint8_t blue, std::uint8_t alpha = alphaByte) noexcept :
             r(red),
             g(green),
             b(blue),
@@ -313,7 +313,7 @@ export namespace Software
 
                     if (_bytesPerPixel == 4)
                     {
-                        _pixels[destRowOffset + 3] = (bufferBytesPerPixel == 4) ? bufferSource[srcRowOffset + 3] : alpha;
+                        _pixels[destRowOffset + 3] = (bufferBytesPerPixel == 4) ? bufferSource[srcRowOffset + 3] : alphaByte;
                     }
 
                     srcRowOffset  += bufferBytesPerPixel;

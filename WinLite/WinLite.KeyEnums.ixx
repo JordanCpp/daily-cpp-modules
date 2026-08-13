@@ -5,6 +5,7 @@
 
 module;
 
+#include <memory_resource>
 #include <cstdint>
 
 export module WinLite.KeyEnums;

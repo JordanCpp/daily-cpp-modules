@@ -5,6 +5,7 @@
 
 module;
 
+#include <memory_resource>
 #include <string>
 #include <utility>
 #include <expected>

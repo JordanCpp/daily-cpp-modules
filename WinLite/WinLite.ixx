@@ -5,6 +5,8 @@
 
 module;
 
+#include <memory_resource>
+
 export module WinLite;
 
 export import WinLite.Events;
