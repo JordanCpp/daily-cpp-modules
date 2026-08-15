@@ -77,7 +77,7 @@ export namespace WinLite
 		OpenGL1Window(const OpenGL1Window&) = delete;
 		OpenGL1Window& operator=(const OpenGL1Window&) = delete;
 
-		static std::expected<OpenGL1Window, std::string> Create(int w, int h, const std::string& title)
+		static std::expected<OpenGL1Window, std::string> Create(std::size_t w, std::size_t h, const std::string& title)
 		{
 			auto result = MainWindow::Create(w, h, title);
 			if (!result.has_value())
@@ -86,7 +86,6 @@ export namespace WinLite
 			}
 
 			MainWindow windowImpl = std::move(*result);
-			HWND hwnd = windowImpl.GetHwnd();
 
 			HDC hdc = windowImpl.GetHdc();
 			if (!hdc)

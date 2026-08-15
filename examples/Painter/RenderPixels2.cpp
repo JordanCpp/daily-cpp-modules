@@ -23,11 +23,7 @@ int main()
     constexpr std::size_t height = 600;
     constexpr std::size_t bytesPerPixel = 3;
 
-    auto windowResult = SoftwareWindow::Create(
-        static_cast<int>(width),
-        static_cast<int>(height),
-        "Daily C++ Modules: Dynamic Demo"
-    );
+    auto windowResult = SoftwareWindow::Create(width, height, "Daily C++ Modules: Dynamic Demo");
 
     if (!windowResult)
     {

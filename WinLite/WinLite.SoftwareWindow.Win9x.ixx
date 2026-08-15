@@ -40,7 +40,7 @@ export namespace WinLite
 		SoftwareWindow(const SoftwareWindow&) = delete;
 		SoftwareWindow& operator=(const SoftwareWindow&) = delete;
 
-		static std::expected<SoftwareWindow, std::string> Create(int w, int h, const std::string& title)
+		static std::expected<SoftwareWindow, std::string> Create(std::size_t w, std::size_t h, const std::string& title)
 		{
 			auto result = MainWindow::Create(w, h, title);
 

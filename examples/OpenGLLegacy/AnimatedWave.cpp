@@ -112,8 +112,8 @@ void updateWave(float time)
 
 int main()
 {
-    constexpr int width = 1024;
-    constexpr int height = 768;
+    constexpr std::size_t width = 1024;
+    constexpr std::size_t height = 768;
 
     auto windowResult = OpenGL1Window::Create(width, height, "OpenGL 1.2 - Animated Wave (100x100 points)");
 

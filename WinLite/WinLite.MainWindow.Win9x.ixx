@@ -123,7 +123,7 @@ export namespace WinLite
 
         }
 
-        static std::expected<MainWindow, std::string> Create(int w, int h, const std::string& title)
+        static std::expected<MainWindow, std::string> Create(std::size_t w, std::size_t h, const std::string& title)
         {
             HINSTANCE instance = GetModuleHandleA(nullptr);
             if (instance == nullptr)

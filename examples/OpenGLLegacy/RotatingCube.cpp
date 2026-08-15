@@ -111,8 +111,8 @@ void setMatrix(GLenum matrixMode, const glm::mat4& matrix)
 
 int main()
 {
-    constexpr int width = 800;
-    constexpr int height = 600;
+    constexpr std::size_t width  = 800;
+    constexpr std::size_t height = 600;
 
     auto windowResult = OpenGL1Window::Create(width, height,
         "OpenGL 1.2 + GLM - Rotating Color Cube");

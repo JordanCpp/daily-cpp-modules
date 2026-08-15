@@ -29,8 +29,8 @@ const float colors[] =
 
 int main()
 {
-    constexpr int width  = 800;
-    constexpr int height = 600;
+    constexpr std::size_t width  = 800;
+    constexpr std::size_t height = 600;
 
     auto windowResult = OpenGL1Window::Create(width, height, "Daily C++ Modules: OpenGL 1.2");
 
