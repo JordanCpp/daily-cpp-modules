@@ -1,14 +1,17 @@
 // Copyright 2026-present Evgeny Zoshchuk (JordanCpp).
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at
-// https://boost.org)
+// https://www.boost.org/LICENSE_1_0.txt)
 
 #include <memory_resource>
-#include <print>
-#include <string>
 #include <cmath>
 #include <chrono>
+#include <format>
+#include <iostream>
 #include <random>
+#include <string>
+#include <numbers>
+#include <print>
 
 import GlmLite;
 import WinLite;
@@ -17,14 +20,46 @@ import FpsCounter;
 
 using namespace WinLite;
 
-constexpr int   GRID_SIZE      = 100;
-constexpr int   POINTS_COUNT   = GRID_SIZE * GRID_SIZE;
-constexpr float GRID_SPACING   = 0.04f;
+constexpr int   GRID_SIZE = 100;
+constexpr int   POINTS_COUNT = GRID_SIZE * GRID_SIZE;
+constexpr float GRID_SPACING = 0.04f;
 constexpr float WAVE_AMPLITUDE = 0.5f;
-constexpr float WAVE_SPEED     = 2.0f;
+constexpr float WAVE_SPEED = 2.0f;
 
 float waveVertices[POINTS_COUNT * 3];
 float waveColors[POINTS_COUNT * 3];
+
+struct WavePoint {
+    float y;
+    float r, g, b;
+};
+
+static WavePoint computeWavePoint(int i, int j, float time) noexcept
+{
+    const float fi = static_cast<float>(i);
+    const float fj = static_cast<float>(j);
+    const float fGridHalf = static_cast<float>(GRID_SIZE) / 2.0f;
+
+    const float x = (fi - fGridHalf) * GRID_SPACING;
+    const float z = (fj - fGridHalf) * GRID_SPACING;
+
+    const float y = WAVE_AMPLITUDE * (
+        static_cast<float>(std::sin(x * 2.0f + time * WAVE_SPEED)) *
+        static_cast<float>(std::cos(z * 1.5f + time * 1.3f)) +
+        static_cast<float>(std::sin((x + z) * 1.2f + time * 0.7f)) * 0.5f +
+        static_cast<float>(std::cos(x * 1.8f - z * 2.0f + time * 1.1f)) * 0.3f
+        );
+
+    const float normalizedHeight = (y / WAVE_AMPLITUDE) * 0.5f + 0.5f;
+
+    float r = normalizedHeight;
+    float g = 0.5f + 0.5f * static_cast<float>(std::sin(normalizedHeight * std::numbers::pi_v<float>));
+    float b = 1.0f - normalizedHeight;
+
+    const float twinkle = 0.8f + 0.2f * static_cast<float>(std::sin(x * 5.0f + z * 7.0f + time * 3.0f));
+
+    return { y, r * twinkle, g * twinkle, b * twinkle };
+}
 
 void setMatrix(GLenum matrixMode, const glm::mat4& matrix)
 {
@@ -32,80 +67,43 @@ void setMatrix(GLenum matrixMode, const glm::mat4& matrix)
     glLoadMatrixf(glm::value_ptr(matrix));
 }
 
-glm::vec3 randomColor()
-{
-    static std::random_device rd;
-    static std::mt19937 gen(rd());
-    static std::uniform_real_distribution<float> dis(0.0f, 1.0f);
-
-    return glm::vec3(dis(gen), dis(gen), dis(gen));
-}
-
 void initWave(float time)
 {
-    for (int i = 0; i < GRID_SIZE; i++)
+    for (int i = 0; i < GRID_SIZE; ++i)
     {
-        for (int j = 0; j < GRID_SIZE; j++)
+        for (int j = 0; j < GRID_SIZE; ++j)
         {
-            int index = (i * GRID_SIZE + j) * 3;
+            const int index = (i * GRID_SIZE + j) * 3;
+            const auto [y, r, g, b] = computeWavePoint(i, j, time);
 
-            float x = (i - GRID_SIZE / 2.0f) * GRID_SPACING;
-            float z = (j - GRID_SIZE / 2.0f) * GRID_SPACING;
+            const float fi = static_cast<float>(i);
+            const float fj = static_cast<float>(j);
+            const float fGridHalf = static_cast<float>(GRID_SIZE) / 2.0f;
 
-            float y = WAVE_AMPLITUDE * (
-                sin(x * 2.0f + time * WAVE_SPEED) *
-                cos(z * 1.5f + time * 1.3f) +
-                sin((x + z) * 1.2f + time * 0.7f) * 0.5f +
-                cos(x * 1.8f - z * 2.0f + time * 1.1f) * 0.3f
-                );
-
-            waveVertices[index] = x;
+            waveVertices[index] = (fi - fGridHalf) * GRID_SPACING;
             waveVertices[index + 1] = y;
-            waveVertices[index + 2] = z;
+            waveVertices[index + 2] = (fj - fGridHalf) * GRID_SPACING;
 
-            float normalizedHeight = (y / WAVE_AMPLITUDE) * 0.5f + 0.5f;
-
-            waveColors[index] = normalizedHeight;
-            waveColors[index + 1] = 0.5f + 0.5f * sin(normalizedHeight * 3.14f);
-            waveColors[index + 2] = 1.0f - normalizedHeight;
-
-            float twinkle = 0.8f + 0.2f * sin(x * 5.0f + z * 7.0f + time * 3.0f);
-            waveColors[index] *= twinkle;
-            waveColors[index + 1] *= twinkle;
-            waveColors[index + 2] *= twinkle;
+            waveColors[index] = r;
+            waveColors[index + 1] = g;
+            waveColors[index + 2] = b;
         }
     }
 }
 
 void updateWave(float time)
 {
-    for (int i = 0; i < GRID_SIZE; i++)
+    for (int i = 0; i < GRID_SIZE; ++i)
     {
-        for (int j = 0; j < GRID_SIZE; j++)
+        for (int j = 0; j < GRID_SIZE; ++j)
         {
-            int index = (i * GRID_SIZE + j) * 3;
-
-            float x = (i - GRID_SIZE / 2.0f) * GRID_SPACING;
-            float z = (j - GRID_SIZE / 2.0f) * GRID_SPACING;
-
-            float y = WAVE_AMPLITUDE * (
-                sin(x * 2.0f + time * WAVE_SPEED) *
-                cos(z * 1.5f + time * 1.3f) +
-                sin((x + z) * 1.2f + time * 0.7f) * 0.5f +
-                cos(x * 1.8f - z * 2.0f + time * 1.1f) * 0.3f
-                );
+            const int index = (i * GRID_SIZE + j) * 3;
+            const auto [y, r, g, b] = computeWavePoint(i, j, time);
 
             waveVertices[index + 1] = y;
-
-            float normalizedHeight = (y / WAVE_AMPLITUDE) * 0.5f + 0.5f;
-            waveColors[index] = normalizedHeight;
-            waveColors[index + 1] = 0.5f + 0.5f * sin(normalizedHeight * 3.14f);
-            waveColors[index + 2] = 1.0f - normalizedHeight;
-
-            float twinkle = 0.8f + 0.2f * sin(x * 5.0f + z * 7.0f + time * 3.0f);
-            waveColors[index] *= twinkle;
-            waveColors[index + 1] *= twinkle;
-            waveColors[index + 2] *= twinkle;
+            waveColors[index] = r;
+            waveColors[index + 1] = g;
+            waveColors[index + 2] = b;
         }
     }
 }
@@ -128,9 +126,9 @@ int main()
 
     glViewport(0, 0, static_cast<GLsizei>(width), static_cast<GLsizei>(height));
 
-    glm::mat4 projectionMatrix = glm::perspective(
+    const glm::mat4 projectionMatrix = glm::perspective(
         glm::radians(50.0f),
-        static_cast<float>(width) / height,
+        static_cast<float>(width) / static_cast<float>(height),
         0.1f,
         20.0f
     );
@@ -145,11 +143,8 @@ int main()
     );
 
     glLoadMatrixf(glm::value_ptr(viewMatrix));
-
     glEnable(GL_DEPTH_TEST);
-
     glPointSize(2.0f);
-
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_COLOR_ARRAY);
 
@@ -160,7 +155,6 @@ int main()
     glColorPointer(3, GL_FLOAT, 0, waveColors);
 
     auto lastTime = std::chrono::steady_clock::now();
-
     float cameraAngle = 0.0f;
     bool autoRotate = true;
 
@@ -168,8 +162,8 @@ int main()
 
     while (window.IsRunning())
     {
-        auto currentTime = std::chrono::steady_clock::now();
-        float deltaTime = std::chrono::duration<float>(currentTime - lastTime).count();
+        const auto currentTime = std::chrono::steady_clock::now();
+        float deltaTime = static_cast<float>(std::chrono::duration<float>(currentTime - lastTime).count());
         lastTime = currentTime;
 
         if (deltaTime > 0.1f) deltaTime = 0.1f;
@@ -199,7 +193,6 @@ int main()
         }
 
         time += deltaTime;
-
         updateWave(time);
 
         glClearColor(0.0f, 0.02f, 0.05f, 1.0f);
@@ -208,14 +201,18 @@ int main()
         if (autoRotate)
         {
             cameraAngle += deltaTime * 0.3f;
-            if (cameraAngle > 2.0f * 3.14159f) cameraAngle -= 2.0f * 3.14159f;
+            if (cameraAngle > 2.0f * std::numbers::pi_v<float>)
+            {
+                cameraAngle -= 2.0f * std::numbers::pi_v<float>;
+            }
 
-            float radius = 3.5f;
-            float height = 1.8f;
-            glm::vec3 cameraPos(
-                radius * sin(cameraAngle),
-                height + 0.3f * sin(cameraAngle * 0.7f),
-                radius * cos(cameraAngle)
+            const float radius = 3.5f;
+            const float camHeight = 1.8f;
+
+            const glm::vec3 cameraPos(
+                radius * static_cast<float>(std::sin(cameraAngle)),
+                camHeight + 0.3f * static_cast<float>(std::sin(cameraAngle * 0.7f)),
+                radius * static_cast<float>(std::cos(cameraAngle))
             );
 
             viewMatrix = glm::lookAt(
@@ -228,16 +225,11 @@ int main()
         }
 
         glDrawArrays(GL_POINTS, 0, POINTS_COUNT);
-
         window.Present();
 
         if (counter.Update())
         {
-            std::string title =
-                std::to_string(counter.GetFps()) + " FPS | " +
-                "Points: " + std::to_string(POINTS_COUNT) + " | " +
-                (autoRotate ? "[Auto Rotate ON]" : "[Auto Rotate OFF]") + " | " +
-                "[Space] Toggle Rotation | [R] Reset";
+            const std::string title = std::format("{} FPS | Points: {} | {} | [Space] Toggle Rotation | [R] Reset", counter.GetFps(), POINTS_COUNT, autoRotate ? "[Auto Rotate ON]" : "[Auto Rotate OFF]");
             window.SetTitle(title);
         }
     }
