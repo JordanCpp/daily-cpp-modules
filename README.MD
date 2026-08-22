@@ -82,11 +82,13 @@ cmake --build build
 | Module | Purpose / Domain | Key C++ Features Used |
 |:---|:---|:---|
 | [`WinLite`](./WinLite) | Lightweight Win32 window, event loop, input, and OpenGL context. | `export module`, `import std;`, Win32 API |
-| [`Painter`](./Painter) | Software rasterizer for primitives and fast pixel blitting. | `export module`, `import std;`, SIMD-friendly |
+| [`PixelPainter`](./PixelPainter) | Software rasterizer for primitives. | `export module`, `import std;`, SIMD-friendly |
+| [`PixelCopier`](./PixelCopier) | Software rasterizer for fast pixel blitting. | `export module`, `import std;`, SIMD-friendly |
 | [`GlmLite`](./GlmLite) | Ultra-lightweight vector math & linear algebra primitives. | `export module`, `import std;` |
 | [`OpenGL`](./OpenGL) | Ultra-lightweight OpenGL extension loader (GLAD alternative). | `export module`, `import std;`, `GetProcAddress` |
 | [`BmpLoader`](./BmpLoader) | Zero-dependency BMP image loader (24-bit and 32-bit support). | `export module`, `import std;`, `std::vector` |
 | [`TgaLoader`](./TgaLoader) | Fast TGA image loader (24-bit and 32-bit, raw & RLE support). | `export module`, `import std;`, `std::span` |
+| [`HighResTimer`](./HighResTimer) | High-resolution performance timer / stopwatch for benchmarking. | `export module`, `import std;`, `std::chrono` |
 
 ---
 
