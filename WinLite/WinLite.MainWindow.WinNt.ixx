@@ -9,6 +9,10 @@ module;
 #include <string>
 #include <expected>
 
+#ifndef NOMINMAX
+    #define NOMINMAX
+#endif
+
 #define UNICODE
 #define _UNICODE
 #include <Windows.h>
@@ -29,10 +33,33 @@ export namespace WinLite
     private:
         static std::wstring Utf8ToUtf16(const std::string& utf8)
         {
-            if (utf8.empty()) return L"";
-            int size_needed = MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), static_cast<int>(utf8.size()), NULL, 0);
-            std::wstring wstrTo(size_needed, 0);
-            MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), static_cast<int>(utf8.size()), &wstrTo[0], size_needed);
+            if (utf8.empty())
+            {
+                return L"";
+            }
+
+            if (utf8.size() > static_cast<std::size_t>(std::numeric_limits<int>::max()))
+            {
+                return L"";
+            }
+
+            const int utf8_size = static_cast<int>(utf8.size());
+            const int size_needed = MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), utf8_size, nullptr, 0);
+
+            if (size_needed <= 0)
+            {
+                return L"";
+            }
+
+            const std::wstring::size_type alloc_size = static_cast<std::wstring::size_type>(size_needed);
+            std::wstring wstrTo(alloc_size, L'\0');
+
+            const int result = MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), utf8_size, &wstrTo[0], size_needed);
+            if (result <= 0)
+            {
+                return L"";
+            }
+
             return wstrTo;
         }
 
@@ -152,7 +179,7 @@ export namespace WinLite
             windowClass.lpszClassName = ClassName;
             windowClass.lpfnWndProc = WndProc;
             windowClass.style = CS_HREDRAW | CS_VREDRAW;
-            windowClass.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+            windowClass.hbrBackground = static_cast<HBRUSH>(GetStockObject(BLACK_BRUSH));
             windowClass.hIcon = LoadIconW(nullptr, IDI_APPLICATION);
             windowClass.hCursor = LoadCursorW(nullptr, IDC_ARROW);
 

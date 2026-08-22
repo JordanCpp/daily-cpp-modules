@@ -17,6 +17,8 @@ import PixelPainter;
 using namespace WinLite;
 using namespace Software;
 
+void DrawCenteredSquare(PixelPainter& render, int centerX, int centerY, int size, Color color) noexcept;
+
 void DrawCenteredSquare(PixelPainter& render, int centerX, int centerY, int size, Color color) noexcept
 {
     if (size <= 0) return;

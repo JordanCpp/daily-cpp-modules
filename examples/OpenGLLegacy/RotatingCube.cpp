@@ -103,6 +103,8 @@ const GLubyte indices[] = {
     0, 1, 5, 4
 };
 
+void setMatrix(GLenum matrixMode, const glm::mat4& matrix);
+
 void setMatrix(GLenum matrixMode, const glm::mat4& matrix)
 {
     glMatrixMode(matrixMode);

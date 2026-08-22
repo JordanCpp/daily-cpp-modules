@@ -34,6 +34,10 @@ struct WavePoint {
     float r, g, b;
 };
 
+void setMatrix(GLenum matrixMode, const glm::mat4& matrix);
+void initWave(float time);
+void updateWave(float time);
+
 static WavePoint computeWavePoint(int i, int j, float time) noexcept
 {
     const float fi = static_cast<float>(i);

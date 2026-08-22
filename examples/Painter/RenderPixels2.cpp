@@ -49,52 +49,58 @@ int main()
             }
         }
 
-        std::uint8_t bgR = static_cast<std::uint8_t>((std::sin(time * 0.5f) * 0.5f + 0.5f) * 40 + 10);
-        std::uint8_t bgG = static_cast<std::uint8_t>((std::sin(time * 0.7f) * 0.5f + 0.5f) * 40 + 10);
-        std::uint8_t bgB = static_cast<std::uint8_t>((std::sin(time * 0.9f) * 0.5f + 0.5f) * 50 + 20);
+        std::uint8_t bgR = static_cast<std::uint8_t>((std::sinf(time * 0.5f) * 0.5f + 0.5f) * 40.0f + 10.0f);
+        std::uint8_t bgG = static_cast<std::uint8_t>((std::sinf(time * 0.7f) * 0.5f + 0.5f) * 40.0f + 10.0f);
+        std::uint8_t bgB = static_cast<std::uint8_t>((std::sinf(time * 0.9f) * 0.5f + 0.5f) * 50.0f + 20.0f);
 
         render.SetColor(Color{ bgR, bgG, bgB });
         render.Clear();
 
         render.SetColor(Color{ 50, 50, 70 });
 
-        for (int x = 0; x < static_cast<int>(width); x += 80)
+        const int iWidth = static_cast<int>(width);
+        const int iHeight = static_cast<int>(height);
+
+        for (int x = 0; x < iWidth; x += 80)
         {
-            
-            render.Line(x, 0, x, static_cast<int>(height));
+            render.Line(x, 0, x, iHeight);
         }
 
-        for (int y = 0; y < static_cast<int>(height); y += 80)
+        for (int y = 0; y < iHeight; y += 80)
         {
-            render.Line(0, y, static_cast<int>(width), y);
+            render.Line(0, y, iWidth, y);
         }
 
-        int rect1X = static_cast<int>(350 + std::cos(time) * 150);
-        int rect1Y = static_cast<int>(220 + std::sin(time) * 100);
+        const float fCenterX = static_cast<float>(width) / 2.0f;
+        const float fCenterY = static_cast<float>(height) / 2.0f;
+
+        int rect1X = static_cast<int>(350.0f + std::cosf(time) * 150.0f);
+        int rect1Y = static_cast<int>(220.0f + std::sinf(time) * 100.0f);
         render.SetColor(Color{ 230, 90, 80 });
         render.Fill(rect1X, rect1Y, 120, 120);
 
-        int rect2X = static_cast<int>(370 + std::sin(time * 1.5f) * 200);
+        int rect2X = static_cast<int>(370.0f + std::sinf(time * 1.5f) * 200.0f);
         render.SetColor(Color{ 60, 130, 240 });
         render.Fill(rect2X, 450, 80, 80);
 
         int centerX = static_cast<int>(width) / 2;
         int centerY = static_cast<int>(height) / 2;
 
-        int line1X = static_cast<int>(centerX + std::cos(time * 0.8f) * 200);
-        int line1Y = static_cast<int>(centerY + std::sin(time * 0.8f) * 200);
+        int line1X = static_cast<int>(fCenterX + std::cosf(time * 0.8f) * 200.0f);
+        int line1Y = static_cast<int>(fCenterY + std::sinf(time * 0.8f) * 200.0f);
         render.SetColor(Color{ 80, 200, 140 });
         render.Line(centerX, centerY, line1X, line1Y);
 
-        int line2X = static_cast<int>(centerX + std::cos(-time * 1.2f) * 150);
-        int line2Y = static_cast<int>(centerY + std::sin(-time * 1.2f) * 150);
+        int line2X = static_cast<int>(fCenterX + std::cosf(-time * 1.2f) * 150.0f);
+        int line2Y = static_cast<int>(fCenterY + std::sinf(-time * 1.2f) * 150.0f);
         render.SetColor(Color{ 220, 80, 220 });
         render.Line(centerX, centerY, line2X, line2Y);
 
         for (int i = 0; i < 400; i += 8)
         {
-            int pX = static_cast<int>(centerX + std::sin(time * 2.0f + static_cast<float>(i)) * (i + 20));
-            int pY = static_cast<int>(centerY + std::cos(time * 2.0f + static_cast<float>(i)) * (i + 20));
+            const float radius = static_cast<float>(i + 20);
+            int pX = static_cast<int>(fCenterX + std::sinf(time * 2.0f + static_cast<float>(i)) * radius);
+            int pY = static_cast<int>(fCenterY + std::cosf(time * 2.0f + static_cast<float>(i)) * radius);
 
             if (pX >= 0 && pY >= 0)
             {

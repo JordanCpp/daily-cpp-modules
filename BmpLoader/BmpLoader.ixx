@@ -12,6 +12,7 @@ module;
 #include <fstream>
 #include <filesystem>
 #include <cmath>
+#include <limits>
 
 export module BmpLoader;
 
@@ -20,26 +21,26 @@ export namespace BmpLoader
 #pragma pack(push, 1)
     struct BmpFileHeader
     {
-        std::uint16_t type;
-        std::uint32_t size;
-        std::uint16_t reserved1;
-        std::uint16_t reserved2;
-        std::uint32_t offset_data;
+        std::uint16_t type{ 0 };
+        std::uint32_t size{ 0 };
+        std::uint16_t reserved1{ 0 };
+        std::uint16_t reserved2{ 0 };
+        std::uint32_t offset_data{ 0 };
     };
 
     struct BmpInfoHeader
     {
-        std::uint32_t size;
-        std::int32_t  width;
-        std::int32_t  height;
-        std::uint16_t planes;
-        std::uint16_t bit_count;
-        std::uint32_t compression;
-        std::uint32_t size_image;
-        std::int32_t  x_pixels_per_meter;
-        std::int32_t  y_pixels_per_meter;
-        std::uint32_t colors_used;
-        std::uint32_t colors_important;
+        std::uint32_t size{ 0 };
+        std::int32_t  width{ 0 };
+        std::int32_t  height{ 0 };
+        std::uint16_t planes{ 0 };
+        std::uint16_t bit_count{ 0 };
+        std::uint32_t compression{ 0 };
+        std::uint32_t size_image{ 0 };
+        std::int32_t  x_pixels_per_meter{ 0 };
+        std::int32_t  y_pixels_per_meter{ 0 };
+        std::uint32_t colors_used{ 0 };
+        std::uint32_t colors_important{ 0 };
     };
 #pragma pack(pop)
 
@@ -48,7 +49,7 @@ export namespace BmpLoader
         std::uint8_t  bpp{ 0 };
         std::uint32_t width{ 0 };
         std::uint32_t height{ 0 };
-        std::vector<std::uint8_t> pixels;
+        std::vector<std::uint8_t> pixels{};
     };
 
     enum class Error
@@ -59,6 +60,8 @@ export namespace BmpLoader
         CorruptedHeader,
         ReadError
     };
+
+    std::expected<Image, Error> Load(const std::filesystem::path& path) noexcept;
 
     std::expected<Image, Error> Load(const std::filesystem::path& path) noexcept
     {
@@ -71,8 +74,11 @@ export namespace BmpLoader
         BmpFileHeader file_header{};
         BmpInfoHeader info_header{};
 
-        if (!file.read(reinterpret_cast<char*>(&file_header), sizeof(file_header)) ||
-            !file.read(reinterpret_cast<char*>(&info_header), sizeof(info_header)))
+        constexpr std::streamsize file_hdr_size = static_cast<std::streamsize>(sizeof(BmpFileHeader));
+        constexpr std::streamsize info_hdr_size = static_cast<std::streamsize>(sizeof(BmpInfoHeader));
+
+        if (!file.read(reinterpret_cast<char*>(&file_header), file_hdr_size) ||
+            !file.read(reinterpret_cast<char*>(&info_header), info_hdr_size))
         {
             return std::unexpected(Error::CorruptedHeader);
         }
@@ -87,49 +93,69 @@ export namespace BmpLoader
             return std::unexpected(Error::UnsupportedBpp);
         }
 
-        const std::uint32_t width = std::abs(info_header.width);
-        const std::uint32_t height = std::abs(info_header.height);
+        if (info_header.width == std::numeric_limits<std::int32_t>::min() ||
+            info_header.height == std::numeric_limits<std::int32_t>::min())
+        {
+            return std::unexpected(Error::InvalidFormat);
+        }
+
+        const std::uint32_t width = static_cast<std::uint32_t>(std::abs(info_header.width));
+        const std::uint32_t height = static_cast<std::uint32_t>(std::abs(info_header.height));
         const bool is_top_down = info_header.height < 0;
 
         Image img{ .bpp = 4, .width = width, .height = height, .pixels = {} };
-        img.pixels.resize(width * height * 4);
 
-        if (!file.seekg(file_header.offset_data, std::ios::beg))
+        const std::size_t total_pixels = static_cast<std::size_t>(width) * static_cast<std::size_t>(height);
+        if (total_pixels > std::numeric_limits<std::size_t>::max() / 4U)
+        {
+            return std::unexpected(Error::InvalidFormat);
+        }
+
+        img.pixels.resize(total_pixels * 4U);
+
+        if (!file.seekg(static_cast<std::streamoff>(file_header.offset_data), std::ios::beg))
         {
             return std::unexpected(Error::ReadError);
         }
 
-        const std::uint32_t bytes_per_pixel = info_header.bit_count / 8;
-        const std::uint32_t row_stride = (width * bytes_per_pixel + 3) & ~3;
+        const std::uint32_t bytes_per_pixel = static_cast<std::uint32_t>(info_header.bit_count / 8U);
+
+        const std::uint32_t row_stride = (width * bytes_per_pixel + 3U) & ~3U;
+
+        if (row_stride > static_cast<std::uint32_t>(std::numeric_limits<std::streamsize>::max()))
+        {
+            return std::unexpected(Error::InvalidFormat);
+        }
+        const std::streamsize read_stride = static_cast<std::streamsize>(row_stride);
 
         std::vector<std::uint8_t> row_buffer(row_stride);
 
         for (std::uint32_t y = 0; y < height; ++y)
         {
-            if (!file.read(reinterpret_cast<char*>(row_buffer.data()), row_stride))
+            if (!file.read(reinterpret_cast<char*>(row_buffer.data()), read_stride))
             {
                 return std::unexpected(Error::ReadError);
             }
 
-            const std::uint32_t target_y = is_top_down ? y : (height - 1 - y);
-            const std::uint32_t target_row_offset = target_y * width * 4;
+            const std::uint32_t target_y = is_top_down ? y : (height - 1U - y);
+            const std::uint32_t target_row_offset = target_y * width * 4U;
 
             for (std::uint32_t x = 0; x < width; ++x)
             {
                 const std::uint32_t src_idx = x * bytes_per_pixel;
-                const std::uint32_t dst_idx = target_row_offset + (x * 4);
+                const std::uint32_t dst_idx = target_row_offset + (x * 4U);
 
-                img.pixels[dst_idx + 0] = row_buffer[src_idx + 2];
-                img.pixels[dst_idx + 1] = row_buffer[src_idx + 1];
-                img.pixels[dst_idx + 2] = row_buffer[src_idx + 0];
+                img.pixels[dst_idx + 0U] = row_buffer[src_idx + 2U];
+                img.pixels[dst_idx + 1U] = row_buffer[src_idx + 1U];
+                img.pixels[dst_idx + 2U] = row_buffer[src_idx + 0U];
 
-                if (bytes_per_pixel == 4)
+                if (bytes_per_pixel == 4U)
                 {
-                    img.pixels[dst_idx + 3] = row_buffer[src_idx + 3];
+                    img.pixels[dst_idx + 3U] = row_buffer[src_idx + 3U];
                 }
                 else
                 {
-                    img.pixels[dst_idx + 3] = 255;
+                    img.pixels[dst_idx + 3U] = 255U;
                 }
             }
         }
