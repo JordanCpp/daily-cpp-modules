@@ -5,60 +5,64 @@
 
 module;
 
+#include <memory_resource>
 #include <chrono>
 #include <iostream>
 #include <string_view>
 
 export module HighResTimer;
 
-class HighResTimer
+export namespace Time
 {
-private:
-    using Clock = std::chrono::high_resolution_clock;
-    using TimePoint = std::chrono::time_point<Clock>;
-
-    TimePoint _startTime;
-    TimePoint _endTime;
-    bool _running{ false };
-
-public:
-    constexpr HighResTimer() noexcept = default;
-
-    void Start() noexcept
+    class HighResTimer
     {
-        _startTime = Clock::now();
-        _running = true;
-    }
+    private:
+        using Clock = std::chrono::high_resolution_clock;
+        using TimePoint = std::chrono::time_point<Clock>;
 
-    void Stop() noexcept
-    {
-        _endTime = Clock::now();
-        _running = false;
-    }
+        TimePoint _startTime;
+        TimePoint _endTime;
+        bool _running{ false };
 
-    void Reset() noexcept
-    {
-        _running = false;
-    }
+    public:
+        constexpr HighResTimer() noexcept = default;
 
-    [[nodiscard]] double ElapsedSeconds() const noexcept
-    {
-        auto end = _running ? Clock::now() : _endTime;
-        std::chrono::duration<double> diff = end - _startTime;
-        return diff.count();
-    }
+        void Start() noexcept
+        {
+            _startTime = Clock::now();
+            _running = true;
+        }
 
-    [[nodiscard]] std::uint64_t ElapsedMicroseconds() const noexcept
-    {
-        auto end = _running ? Clock::now() : _endTime;
-        return static_cast<std::uint64_t>(std::chrono::duration_cast<std::chrono::microseconds>(end - _startTime).count());
-    }
+        void Stop() noexcept
+        {
+            _endTime = Clock::now();
+            _running = false;
+        }
 
-    [[nodiscard]] std::uint64_t ElapsedNanoseconds() const noexcept
-    {
-        auto end = _running ? Clock::now() : _endTime;
-        return static_cast<std::uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(end - _startTime).count());
-    }
+        void Reset() noexcept
+        {
+            _running = false;
+        }
 
-    [[nodiscard]] bool IsRunning() const noexcept { return _running; }
-};
+        [[nodiscard]] double ElapsedSeconds() const noexcept
+        {
+            auto end = _running ? Clock::now() : _endTime;
+            std::chrono::duration<double> diff = end - _startTime;
+            return diff.count();
+        }
+
+        [[nodiscard]] std::uint64_t ElapsedMicroseconds() const noexcept
+        {
+            auto end = _running ? Clock::now() : _endTime;
+            return static_cast<std::uint64_t>(std::chrono::duration_cast<std::chrono::microseconds>(end - _startTime).count());
+        }
+
+        [[nodiscard]] std::uint64_t ElapsedNanoseconds() const noexcept
+        {
+            auto end = _running ? Clock::now() : _endTime;
+            return static_cast<std::uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(end - _startTime).count());
+        }
+
+        [[nodiscard]] bool IsRunning() const noexcept { return _running; }
+    };
+}
