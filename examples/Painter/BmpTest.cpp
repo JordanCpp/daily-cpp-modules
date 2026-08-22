@@ -8,7 +8,8 @@
 #include <string>
 
 import WinLite;
-import Painter;
+import PixelPainter;
+import PixelCopier;
 import BmpLoader;
 import FpsCounter;
 
@@ -31,7 +32,8 @@ int main()
 
     SoftwareWindow window = std::move(*windowResult);
     std::vector<std::uint8_t> frameBuffer(width * height * bytesPerPixel);
-    Painter render(width, height, bytesPerPixel, std::span<std::uint8_t>(frameBuffer.data(), frameBuffer.size()));
+    PixelPainter painter(width, height, bytesPerPixel, std::span<std::uint8_t>(frameBuffer.data(), frameBuffer.size()));
+    PixelCopier copier(width, height, bytesPerPixel, std::span<std::uint8_t>(frameBuffer.data(), frameBuffer.size()));
 
     auto result = BmpLoader::Load("files/LDL_24_256.bmp");
 
@@ -48,14 +50,14 @@ int main()
             }
         }
 
-        render.SetColor(Color{ 10, 10, 15 });
-        render.Clear();
+        painter.SetColor(Color{ 10, 10, 15 });
+        painter.Clear();
 
         if (result)
         {
             const BmpLoader::Image& img = result.value();
 
-            render.Copy(0, 0, img.width, img.height, img.bpp, img.pixels);
+            copier.Copy(0, 0, img.width, img.height, img.bpp, img.pixels);
         }
 
         window.Present(frameBuffer.data(), bytesPerPixel, width, height);

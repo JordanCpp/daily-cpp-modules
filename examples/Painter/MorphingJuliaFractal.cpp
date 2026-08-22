@@ -12,7 +12,7 @@
 #include <algorithm>
 
 import WinLite;
-import Painter;
+import PixelPainter;
 
 using namespace WinLite;
 using namespace Software;
@@ -33,7 +33,7 @@ int main()
 
     SoftwareWindow window = std::move(*windowResult);
     std::vector<std::uint8_t> frameBuffer(width * height * bytesPerPixel);
-    Painter render(width, height, bytesPerPixel, std::span<std::uint8_t>(frameBuffer.data(), frameBuffer.size()));
+    PixelPainter render(width, height, bytesPerPixel, std::span<std::uint8_t>(frameBuffer.data(), frameBuffer.size()));
 
     float time = 0.0f;
     constexpr int maxIterations = 60;

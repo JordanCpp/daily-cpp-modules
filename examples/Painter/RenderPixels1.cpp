@@ -11,7 +11,7 @@
 #include <algorithm>
 
 import WinLite;
-import Painter;
+import PixelPainter;
 
 using namespace WinLite;
 using namespace Software;
@@ -34,7 +34,7 @@ int main()
 
     std::vector<std::uint8_t> frameBuffer(width * height * bytesPerPixel);
 
-    Painter render(width, height, bytesPerPixel, std::span<std::uint8_t>(frameBuffer.data(), frameBuffer.size()));
+    PixelPainter render(width, height, bytesPerPixel, std::span<std::uint8_t>(frameBuffer.data(), frameBuffer.size()));
 
     constexpr Color backgroundColor{ 24, 28, 36 };
     constexpr Color gridColor{ 46, 54, 66 };

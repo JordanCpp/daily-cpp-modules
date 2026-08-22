@@ -15,7 +15,7 @@ set(TARGET_NAMES
 
 foreach(TARGET_NAME IN LISTS TARGET_NAMES)
     add_executable(${TARGET_NAME} "${TARGET_NAME}.cpp")
-    target_link_libraries(${TARGET_NAME} PRIVATE Painter GlmLite WinLite OpenGL FpsCounter BmpLoader)
+    target_link_libraries(${TARGET_NAME} PRIVATE PixelPainter PixelCopier GlmLite WinLite OpenGL FpsCounter BmpLoader)
 
     if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         target_link_libraries(${TARGET_NAME} PRIVATE stdc++exp)
