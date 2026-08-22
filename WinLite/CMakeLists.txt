@@ -11,10 +11,9 @@ add_library(WinLite)
 if(WIN32)
     set(MODULE_FILE 
     #"WinLite.MainWindow.Win9x.ixx"
-    "WinLite.SoftwareWindow.Win9x.ixx"
-    "WinLite.OpenGL1Window.Win9x.ixx"
-    
-    "WinLite.MainWindow.WinNt.ixx")
+    "WinLite.MainWindow.WinNt.ixx"
+    "WinLite.SoftwareWindow.Win.ixx"
+    "WinLite.OpenGL1Window.Win.ixx")
 
     target_link_libraries(WinLite opengl32)
 else()
