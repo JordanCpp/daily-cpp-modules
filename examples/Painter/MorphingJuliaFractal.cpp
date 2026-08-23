@@ -14,8 +14,8 @@ using namespace Software;
 
 int main()
 {
-    constexpr std::size_t width = 640;
-    constexpr std::size_t height = 480;
+    constexpr std::size_t width = 800;
+    constexpr std::size_t height = 600;
 
     App app;
     if (!app.Init(width, height, "Daily C++ Modules: Morphing Julia Fractal"))

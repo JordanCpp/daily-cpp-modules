@@ -14,11 +14,8 @@ using namespace Software;
 
 int main()
 {
-    constexpr std::size_t width = 800;
-    constexpr std::size_t height = 600;
-
     App app;
-    if (!app.Init(width, height, "Daily C++ Modules: Enhanced Interactive Demo"))
+    if (!app.Init("Daily C++ Modules: Enhanced Interactive Demo"))
     {
         return -1;
     }
@@ -53,27 +50,27 @@ int main()
         int hoverGridX = (mouseX / gridSize) * gridSize;
         int hoverGridY = (mouseY / gridSize) * gridSize;
 
-        for (int x = 0; x < static_cast<int>(width); x += gridSize)
+        for (int x = 0; x < static_cast<int>(app.GetWidth()); x += gridSize)
         {
             if (x == hoverGridX || x == hoverGridX + gridSize)
                 render.SetColor(gridHighlightColor);
             else
                 render.SetColor(gridColor);
 
-            render.Line(x, 0, x, static_cast<int>(height));
+            render.Line(x, 0, x, static_cast<int>(app.GetHeight()));
         }
 
-        for (int y = 0; y < static_cast<int>(height); y += gridSize)
+        for (int y = 0; y < static_cast<int>(app.GetHeight()); y += gridSize)
         {
             if (y == hoverGridY || y == hoverGridY + gridSize)
                 render.SetColor(gridHighlightColor);
             else
                 render.SetColor(gridColor);
 
-            render.Line(0, y, static_cast<int>(width), y);
+            render.Line(0, y, static_cast<int>(app.GetWidth()), y);
         }
 
-        if (mouseX >= 0 && mouseX < static_cast<int>(width) && mouseY >= 0 && mouseY < static_cast<int>(height))
+        if (mouseX >= 0 && mouseX < static_cast<int>(app.GetWidth()) && mouseY >= 0 && mouseY < static_cast<int>(app.GetHeight()))
         {
             render.SetColor(Color{ 40, 60, 90 });
             render.Fill(hoverGridX + 1, hoverGridY + 1, gridSize - 1, gridSize - 1);
@@ -99,7 +96,7 @@ int main()
             std::size_t px = static_cast<std::size_t>(300 + i);
             int waveY = static_cast<int>(200.0f + std::sin(animationTime * 5.0f + static_cast<float>(i) * 0.05f) * 20.0f);
 
-            if (waveY >= 0 && waveY < static_cast<int>(height))
+            if (waveY >= 0 && waveY < static_cast<int>(app.GetHeight()))
             {
                 render.Pixel(px, static_cast<std::size_t>(waveY));
             }

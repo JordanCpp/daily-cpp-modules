@@ -15,21 +15,18 @@ using namespace Software;
 
 int main()
 {
-    constexpr std::size_t width = 800;
-    constexpr std::size_t height = 600;
-
     App app;
-    if (!app.Init(width, height, "Daily C++ Modules: Cyberpunk Retro Grid"))
+    if (!app.Init("Daily C++ Modules: Cyberpunk Retro Grid"))
     {
         return -1;
     }
 
     double totalElapsed = 0.0;
 
-    const int horizonY = static_cast<int>(static_cast<double>(height) * 0.45);
-    const int centerX = static_cast<int>(width / 2U);
-    const int iWidth = static_cast<int>(width);
-    const int iHeight = static_cast<int>(height);
+    const int horizonY = static_cast<int>(static_cast<double>(app.GetHeight()) * 0.45);
+    const int centerX  = static_cast<int>(app.GetWidth() / 2U);
+    const int iWidth   = static_cast<int>(app.GetWidth());
+    const int iHeight  = static_cast<int>(app.GetHeight());
 
     app.OnEvent = [&](const Event&) noexcept {};
 

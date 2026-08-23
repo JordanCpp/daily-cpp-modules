@@ -14,11 +14,8 @@ using namespace Software;
 
 int main()
 {
-    constexpr std::size_t width = 800;
-    constexpr std::size_t height = 600;
-
     App app;
-    if (!app.Init(width, height, "Daily C++ Modules: Enhanced Dynamic Demo"))
+    if (!app.Init("Daily C++ Modules: Enhanced Dynamic Demo"))
     {
         return -1;
     }
@@ -27,8 +24,8 @@ int main()
     int mouseX = 0;
     int mouseY = 0;
 
-    const int iWidth = static_cast<int>(width);
-    const int iHeight = static_cast<int>(height);
+    const int iWidth = static_cast<int>(app.GetWidth());
+    const int iHeight = static_cast<int>(app.GetHeight());
     const int centerX = iWidth / 2;
     const int centerY = iHeight / 2;
     const float fCenterX = static_cast<float>(centerX);

@@ -22,7 +22,7 @@ struct MagnetPole {
 int main()
 {
     constexpr std::size_t width = 800;
-    constexpr std::size_t height = 800;
+    constexpr std::size_t height = 600;
 
     App app;
     if (!app.Init(width, height, "Daily C++ Modules: Magnetic Vector Field"))

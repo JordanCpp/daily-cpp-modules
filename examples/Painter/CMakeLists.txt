@@ -16,6 +16,7 @@ target_link_libraries(AppPainter PUBLIC
     OpenGL 
     FpsCounter 
     BmpLoader
+    BmpSaver
 )
 
 target_compile_options(AppPainter PRIVATE ${GLOBAL_COMPILE_OPTIONS})

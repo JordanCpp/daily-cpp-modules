@@ -58,7 +58,7 @@ void GenerateLightningBranch(PixelPainter& painter, int x0, int y0, int x1, int 
 int main()
 {
     constexpr std::size_t width = 800;
-    constexpr std::size_t height = 800;
+    constexpr std::size_t height = 600;
 
     App app;
     if (!app.Init(width, height, "Daily C++ Modules: Tesla Lightning Show"))

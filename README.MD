@@ -129,12 +129,14 @@ This project is open-source software licensed under the **Boost Software License
 
 Here is the `RenderPixels` showcase running live, combining both **WinLite** (window management) and **SoftwareRender** (fixed-point canvas primitives, Bresenham lines, and clipping math) modules:
 
-<p align="center">
-  <img src="./screenshots/MorphingJuliaFractal.jpg" alt="Morphing Julia Fractal" width="75%" />
-  <img src="./screenshots/RetroTunnelEffect.jpg"    alt="Retro Tunnel Effect"    width="75%" />
-  <img src="./screenshots/StarfieldSimulation.jpg"  alt="Starfield Simulation"   width="75%" />
-  <img src="./screenshots/RenderPixels1.jpg"        alt="Render Pixels Demo 1"   width="75%" />
-  <img src="./screenshots/RenderPixels2.jpg"        alt="Render Pixels Demo 2"   width="75%" />
-</p>
+| | | |
+| :---: | :---: | :---: |
+| <img src="./screenshots/Screenshot_App_2026-08-23_22-30-20.840527800.jpg" width="100%" /> | <img src="./screenshots/Screenshot_App_2026-08-23_22-28-41.772413900.jpg" width="100%" /> | <img src="./screenshots/Screenshot_App_2026-08-23_22-29-56.984734100.jpg" width="100%" /> |
+| <img src="./screenshots/Screenshot_App_2026-08-23_22-30-43.389195200.jpg" width="100%" /> | <img src="./screenshots/Screenshot_App_2026-08-23_22-30-01.051758300.jpg" width="100%" /> | <img src="./screenshots/Screenshot_App_2026-08-23_22-29-31.586720600.jpg" width="100%" /> |
+| <img src="./screenshots/Screenshot_App_2026-08-23_22-29-13.341868300.jpg" width="100%" /> | <img src="./screenshots/Screenshot_App_2026-08-23_22-30-31.460795000.jpg" width="100%" /> | <img src="./screenshots/Screenshot_App_2026-08-23_22-29-53.556601400.jpg" width="100%" /> |
+| <img src="./screenshots/Screenshot_App_2026-08-23_22-29-45.236693900.jpg" width="100%" /> | <img src="./screenshots/Screenshot_App_2026-08-23_22-28-51.884814200.jpg" width="100%" /> | <img src="./screenshots/Screenshot_App_2026-08-23_22-30-34.809726400.jpg" width="100%" /> |
+| <img src="./screenshots/Screenshot_App_2026-08-23_22-28-28.941165600.jpg" width="100%" /> | <img src="./screenshots/Screenshot_App_2026-08-23_22-29-50.363840400.jpg" width="100%" /> | <img src="./screenshots/Screenshot_App_2026-08-23_22-28-34.580100600.jpg" width="100%" /> |
+| <img src="./screenshots/Screenshot_App_2026-08-23_22-28-46.796540000.jpg" width="100%" /> | <img src="./screenshots/Screenshot_App_2026-08-23_22-30-38.275667200.jpg" width="100%" /> | <img src="./screenshots/Screenshot_App_2026-08-23_22-30-49.236747700.jpg" width="100%" /> |
+
 
 ---
