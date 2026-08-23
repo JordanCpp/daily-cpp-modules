@@ -11,8 +11,10 @@
 #include <iostream>
 #include <algorithm>
 
+import App;
 import WinLite;
 import PixelPainter;
+import PixelCopier;
 
 using namespace WinLite;
 using namespace Software;
@@ -21,19 +23,12 @@ int main()
 {
     constexpr std::size_t width = 640;
     constexpr std::size_t height = 480;
-    constexpr std::size_t bytesPerPixel = 3;
 
-    auto windowResult = SoftwareWindow::Create(width, height, "Daily C++ Modules: Morphing Julia Fractal");
-
-    if (!windowResult)
+    App app;
+    if (!app.Init(width, height, "Daily C++ Modules: Morphing Julia Fractal"))
     {
-        std::cout << "Error: " << windowResult.error() << std::endl;
         return -1;
     }
-
-    SoftwareWindow window = std::move(*windowResult);
-    std::vector<std::uint8_t> frameBuffer(width * height * bytesPerPixel);
-    PixelPainter render(width, height, bytesPerPixel, std::span<std::uint8_t>(frameBuffer.data(), frameBuffer.size()));
 
     float time = 0.0f;
     constexpr int maxIterations = 60;
@@ -43,17 +38,13 @@ int main()
     constexpr float minIm = -1.2f;
     constexpr float maxIm = 1.2f;
 
-    while (window.IsRunning())
-    {
-        Event event;
-        while (window.GetEvent(event))
-        {
-            if ((event.Type == EventType::Quit) || event.IsKeyPressed(Key::Escape))
-            {
-                window.StopEvent();
-            }
-        }
+    app.OnEvent = [&](const Event&) noexcept {};
 
+    app.OnUpdate = [&](float deltaTime) noexcept {
+        time += deltaTime;
+        };
+
+    app.OnRender = [&](PixelPainter& render, PixelCopier&) noexcept {
         float cRe = -0.7f + std::sin(time * 0.3f) * 0.15f;
         float cIm = 0.27015f + std::cos(time * 0.4f) * 0.05f;
 
@@ -105,11 +96,9 @@ int main()
                 render.Pixel(x, y);
             }
         }
+        };
 
-        time += 0.02f;
-
-        window.Present(frameBuffer.data(), bytesPerPixel, width, height);
-    }
+    app.Run();
 
     return 0;
 }

@@ -7,6 +7,7 @@
 #include <print>
 #include <string>
 
+import App;
 import WinLite;
 import PixelPainter;
 import PixelCopier;
@@ -20,53 +21,28 @@ int main()
 {
     constexpr std::size_t width = 800;
     constexpr std::size_t height = 600;
-    constexpr std::size_t bytesPerPixel = 3;
 
-    auto windowResult = SoftwareWindow::Create(width, height, "Daily C++ Modules: Starfield Simulation");
-
-    if (!windowResult)
+    App app;
+    if (!app.Init(width, height, "Daily C++ Modules: Starfield Simulation"))
     {
-        std::println("Error: {}", windowResult.error());
         return -1;
     }
 
-    SoftwareWindow window = std::move(*windowResult);
-    std::vector<std::uint8_t> frameBuffer(width * height * bytesPerPixel);
-    PixelPainter painter(width, height, bytesPerPixel, std::span<std::uint8_t>(frameBuffer.data(), frameBuffer.size()));
-    PixelCopier copier(width, height, bytesPerPixel, std::span<std::uint8_t>(frameBuffer.data(), frameBuffer.size()));
-
     auto result = BmpLoader::Load("files/LDL_24_256.bmp");
 
-    FpsCounter counter;
+    app.OnEvent = [&](const Event&) noexcept {};
 
-    while (window.IsRunning())
-    {
-        Event event;
-        while (window.GetEvent(event))
-        {
-            if ((event.Type == EventType::Quit) || event.IsKeyPressed(Key::Escape))
-            {
-                window.StopEvent();
-            }
-        }
+    app.OnUpdate = [&](float) noexcept {};
 
-        painter.SetColor(Color{ 10, 10, 15 });
-        painter.Clear();
-
+    app.OnRender = [&](PixelPainter&, PixelCopier& copier) noexcept {
         if (result)
         {
             const BmpLoader::Image& img = result.value();
-
             copier.Copy(0, 0, img.width, img.height, img.bpp, img.pixels);
         }
+        };
 
-        window.Present(frameBuffer.data(), bytesPerPixel, width, height);
-
-        if (counter.Update())
-        {
-            window.SetTitle(std::to_string(counter.GetFps()));
-        }
-    }
+    app.Run();
 
     return 0;
 }

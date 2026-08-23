@@ -9,8 +9,10 @@
 #include <vector>
 #include <iostream>
 
+import App;
 import WinLite;
 import PixelPainter;
+import PixelCopier;
 import FpsCounter;
 
 using namespace WinLite;
@@ -24,58 +26,43 @@ int main()
 {
     constexpr std::size_t width = 800;
     constexpr std::size_t height = 800;
-    constexpr std::size_t bytesPerPixel = 4;
 
-    auto windowResult = SoftwareWindow::Create(width, height, "Daily C++ Modules: Mandala Generator");
-
-    if (!windowResult)
+    App app;
+    if (!app.Init(width, height, "Daily C++ Modules: Mandala Generator"))
     {
         return -1;
     }
 
-    SoftwareWindow window = std::move(*windowResult);
-    std::vector<std::uint8_t> frameBuffer(width * height * bytesPerPixel);
+    float elapsed = 0.0f;
 
-    PixelPainter painter(width, height, bytesPerPixel, std::span<std::uint8_t>(frameBuffer.data(), frameBuffer.size()));
-    FpsCounter counter;
+    const int centerX = static_cast<int>(width / 2);
+    const int centerY = static_cast<int>(height / 2);
 
-    auto startTime = std::chrono::steady_clock::now();
+    constexpr int symmetrySteps = 12;
+    constexpr double angleStep = (2.0 * Math::PI) / symmetrySteps;
 
-    while (window.IsRunning())
-    {
-        Event event;
-        while (window.GetEvent(event))
-        {
-            if ((event.Type == EventType::Quit) || event.IsKeyPressed(Key::Escape))
-            {
-                window.StopEvent();
-            }
-        }
+    app.OnEvent = [&](const Event&) noexcept {};
 
-        auto currentTime = std::chrono::steady_clock::now();
-        double elapsed = std::chrono::duration<double>(currentTime - startTime).count();
+    app.OnUpdate = [&](float deltaTime) noexcept {
+        elapsed += deltaTime;
+        };
 
+    app.OnRender = [&](PixelPainter& painter, PixelCopier&) noexcept {
         painter.SetColor(Color{ 5, 5, 15, 255 });
         painter.Clear();
 
-        const int centerX = static_cast<int>(width / 2);
-        const int centerY = static_cast<int>(height / 2);
-
-        const int symmetrySteps = 12;
-        const double angleStep = (2.0 * Math::PI) / symmetrySteps;
-
         for (int i = 0; i < symmetrySteps; ++i)
         {
-            double currentAngle = i * angleStep + (elapsed * 0.2);
+            double currentAngle = i * angleStep + (static_cast<double>(elapsed) * 0.2);
 
-            double radius = 150.0 + 50.0 * std::sin(elapsed * 1.5);
+            double radius = 150.0 + 50.0 * std::sin(static_cast<double>(elapsed) * 1.5);
 
             int xEnd = centerX + static_cast<int>(radius * std::cos(currentAngle));
             int yEnd = centerY + static_cast<int>(radius * std::sin(currentAngle));
 
             painter.SetColor(Color{
-                static_cast<uint8_t>(127 + 127 * std::sin(elapsed + i)),
-                static_cast<uint8_t>(127 + 127 * std::cos(elapsed * 0.5)),
+                static_cast<uint8_t>(127 + 127 * std::sin(static_cast<double>(elapsed) + i)),
+                static_cast<uint8_t>(127 + 127 * std::cos(static_cast<double>(elapsed) * 0.5)),
                 255,
                 255
                 });
@@ -85,8 +72,8 @@ int main()
 
         for (int i = 0; i < symmetrySteps; ++i)
         {
-            double currentAngle = i * angleStep - (elapsed * 0.5);
-            double radius = 200.0 + 20.0 * std::cos(elapsed * 2.0);
+            double currentAngle = i * angleStep - (static_cast<double>(elapsed) * 0.5);
+            double radius = 200.0 + 20.0 * std::cos(static_cast<double>(elapsed) * 2.0);
 
             int xPos = centerX + static_cast<int>(radius * std::cos(currentAngle));
             int yPos = centerY + static_cast<int>(radius * std::sin(currentAngle));
@@ -100,7 +87,7 @@ int main()
 
         for (int i = 0; i < symmetrySteps * 2; ++i)
         {
-            double currentAngle = i * (Math::PI / symmetrySteps) + (elapsed * 0.8);
+            double currentAngle = i * (Math::PI / symmetrySteps) + (static_cast<double>(elapsed) * 0.8);
             double r1 = 100.0;
             double r2 = 250.0;
 
@@ -112,14 +99,9 @@ int main()
             painter.SetColor(Color{ 50, 255, 150, 150 });
             painter.Line(x1, y1, x2, y2);
         }
+        };
 
-        window.Present(frameBuffer.data(), bytesPerPixel, width, height);
-
-        if (counter.Update())
-        {
-            window.SetTitle("Mandala Generator - FPS: " + std::to_string(counter.GetFps()));
-        }
-    }
+    app.Run();
 
     return 0;
 }

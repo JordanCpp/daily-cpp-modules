@@ -74,7 +74,7 @@ export namespace WinLite
 			_impl.SetTitle(title);
 		}
 
-		void Present(const uint8_t* pixels, uint8_t bytes, int w, int h)
+		void Present(const std::uint8_t* pixels, std::uint8_t bytes, std::size_t w, std::size_t h)
 		{
 			_bitmapInfo.bmiHeader.biWidth    = static_cast<LONG>(w);
 			_bitmapInfo.bmiHeader.biHeight   = static_cast<LONG>(-h);

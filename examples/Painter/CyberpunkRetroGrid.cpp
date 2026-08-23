@@ -9,8 +9,10 @@
 #include <vector>
 #include <string>
 
+import App;
 import WinLite;
 import PixelPainter;
+import PixelCopier;
 import FpsCounter;
 
 using namespace WinLite;
@@ -20,42 +22,27 @@ int main()
 {
     constexpr std::size_t width = 800;
     constexpr std::size_t height = 600;
-    constexpr std::size_t bytesPerPixel = 4;
 
-    auto windowResult = SoftwareWindow::Create(width, height, "Daily C++ Modules: Cyberpunk Retro Grid");
-
-    if (!windowResult)
+    App app;
+    if (!app.Init(width, height, "Daily C++ Modules: Cyberpunk Retro Grid"))
     {
         return -1;
     }
 
-    SoftwareWindow window = std::move(*windowResult);
-    std::vector<std::uint8_t> frameBuffer(width * height * bytesPerPixel);
-
-    PixelPainter painter(width, height, bytesPerPixel, std::span<std::uint8_t>(frameBuffer.data(), frameBuffer.size()));
-    FpsCounter counter;
-
-    auto startTime = std::chrono::steady_clock::now();
+    double totalElapsed = 0.0;
 
     const int horizonY = static_cast<int>(static_cast<double>(height) * 0.45);
     const int centerX = static_cast<int>(width / 2U);
     const int iWidth = static_cast<int>(width);
     const int iHeight = static_cast<int>(height);
 
-    while (window.IsRunning())
-    {
-        Event event;
-        while (window.GetEvent(event))
-        {
-            if ((event.Type == EventType::Quit) || event.IsKeyPressed(Key::Escape))
-            {
-                window.StopEvent();
-            }
-        }
+    app.OnEvent = [&](const Event&) noexcept {};
 
-        auto currentTime = std::chrono::steady_clock::now();
-        double elapsed = std::chrono::duration<double>(currentTime - startTime).count();
+    app.OnUpdate = [&](float deltaTime) noexcept {
+        totalElapsed += deltaTime;
+        };
 
+    app.OnRender = [&](PixelPainter& painter, PixelCopier&) noexcept {
         painter.SetColor(Color{ 10, 0, 20, 255 });
         painter.Clear();
 
@@ -80,14 +67,12 @@ int main()
 
         constexpr int numLines = 30;
         constexpr float speed = 0.5f;
-        float moveOffset = std::fmodf(static_cast<float>(elapsed) * speed, 1.0f);
+        float moveOffset = std::fmodf(static_cast<float>(totalElapsed) * speed, 1.0f);
 
         for (int i = 0; i < numLines; ++i)
         {
             float z = (static_cast<float>(i) + moveOffset) / static_cast<float>(numLines);
-
             float perspectiveZ = std::powf(z, 2.0f);
-
             int y = horizonY + static_cast<int>(perspectiveZ * static_cast<float>(iHeight - horizonY));
 
             if (y >= horizonY && y < iHeight)
@@ -95,19 +80,9 @@ int main()
                 painter.Line(0, y, iWidth, y);
             }
         }
+        };
 
-        window.Present(
-            frameBuffer.data(),
-            static_cast<int>(bytesPerPixel),
-            iWidth,
-            iHeight
-        );
-
-        if (counter.Update())
-        {
-            window.SetTitle("Cyberpunk Grid - FPS: " + std::to_string(counter.GetFps()));
-        }
-    }
+    app.Run();
 
     return 0;
 }
