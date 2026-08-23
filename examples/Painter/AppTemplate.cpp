@@ -13,7 +13,7 @@
 import App;
 import WinLite;
 import PixelPainter;
-import FpsCounter;
+import PixelCopier;
 
 using namespace WinLite;
 using namespace Software;
@@ -26,16 +26,12 @@ int main()
         return -1;
     }
 
-/*
-    app.OnEvent = [&](const Event& event) {
-        };
+    app.OnEvent = [&](const Event&) noexcept {};
 
-    app.OnUpdate = [&](float deltaTime) {
-        };
+    app.OnUpdate = [&](float) noexcept {};
 
-    app.OnRender = [&](auto& painter, auto& copier) {
-        };
-*/
+    app.OnRender = [&](PixelPainter&, PixelCopier&) noexcept {};
+
     app.Run();
 
     return 0;

@@ -11,8 +11,10 @@
 #include <random>
 #include <algorithm>
 
+import App;
 import WinLite;
 import PixelPainter;
+import PixelCopier;
 
 using namespace WinLite;
 using namespace Software;
@@ -28,19 +30,12 @@ int main()
 {
     constexpr std::size_t width = 800;
     constexpr std::size_t height = 600;
-    constexpr std::size_t bytesPerPixel = 3;
 
-    auto windowResult = SoftwareWindow::Create(width, height, "Daily C++ Modules: Starfield Simulation");
-
-    if (!windowResult)
+    App app;
+    if (!app.Init(width, height, "Daily C++ Modules: Starfield Simulation"))
     {
-        std::cout << "Error: " << windowResult.error() << std::endl;
         return -1;
     }
-
-    SoftwareWindow window = std::move(*windowResult);
-    std::vector<std::uint8_t> frameBuffer(width * height * bytesPerPixel);
-    PixelPainter render(width, height, bytesPerPixel, std::span<std::uint8_t>(frameBuffer.data(), frameBuffer.size()));
 
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -64,20 +59,9 @@ int main()
         star.z = distZ(gen);
     }
 
-    while (window.IsRunning())
-    {
-        Event event;
-        while (window.GetEvent(event))
-        {
-            if ((event.Type == EventType::Quit) || event.IsKeyPressed(Key::Escape))
-            {
-                window.StopEvent();
-            }
-        }
+    app.OnEvent = [&](const Event&) noexcept {};
 
-        render.SetColor(Color{ 10, 10, 15 });
-        render.Clear();
-
+    app.OnUpdate = [&](float) noexcept {
         for (auto& star : stars)
         {
             star.z -= speed;
@@ -87,8 +71,17 @@ int main()
                 star.x = distCoord(gen);
                 star.y = distCoord(gen);
                 star.z = maxDepth;
-                continue;
             }
+        }
+        };
+
+    app.OnRender = [&](PixelPainter& render, PixelCopier&) noexcept {
+        render.SetColor(Color{ 10, 10, 15 });
+        render.Clear();
+
+        for (auto& star : stars)
+        {
+            if (star.z <= 0.0f) continue;
 
             int screenX = static_cast<int>(centerX + (star.x * fov) / star.z);
             int screenY = static_cast<int>(centerY + (star.y * fov) / star.z);
@@ -103,7 +96,6 @@ int main()
             }
 
             float brightnessFactor = 1.0f - (star.z / maxDepth);
-
             brightnessFactor = std::pow(brightnessFactor, 2.0f);
 
             auto brightness = static_cast<std::uint8_t>(brightnessFactor * 255.0f);
@@ -118,9 +110,9 @@ int main()
             render.SetColor(Color{ r, g, b });
             render.Pixel(px, py);
         }
+        };
 
-        window.Present(frameBuffer.data(), bytesPerPixel, width, height);
-    }
+    app.Run();
 
     return 0;
 }

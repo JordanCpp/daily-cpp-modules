@@ -21,8 +21,8 @@ set(TARGET_NAMES
     MandalaGenerator
     MorphingJuliaFractal
     RetroTunnelEffect
-    RenderPixels1
-    RenderPixels2
+    EnhancedInteractive
+    EnhancedDynamic
     StarfieldSimulation
 )
 

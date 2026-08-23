@@ -11,8 +11,10 @@
 #include <iostream>
 #include <algorithm>
 
+import App;
 import WinLite;
 import PixelPainter;
+import PixelCopier;
 
 using namespace WinLite;
 using namespace Software;
@@ -40,38 +42,26 @@ int main()
 {
     constexpr std::size_t width = 800;
     constexpr std::size_t height = 600;
-    constexpr std::size_t bytesPerPixel = 3;
 
-    auto windowResult = SoftwareWindow::Create(width, height, "Daily C++ Modules: Retro Tunnel Effect");
-
-    if (!windowResult)
+    App app;
+    if (!app.Init(width, height, "Daily C++ Modules: Retro Tunnel Effect"))
     {
-        std::cout << "Error: " << windowResult.error() << std::endl;
         return -1;
     }
-
-    SoftwareWindow window = std::move(*windowResult);
-    std::vector<std::uint8_t> frameBuffer(width * height * bytesPerPixel);
-    PixelPainter render(width, height, bytesPerPixel, std::span<std::uint8_t>(frameBuffer.data(), frameBuffer.size()));
 
     const int centerX = static_cast<int>(width) / 2;
     const int centerY = static_cast<int>(height) / 2;
 
     float time = 0.0f;
-
     constexpr int numRings = 30;
 
-    while (window.IsRunning())
-    {
-        Event event;
-        while (window.GetEvent(event))
-        {
-            if ((event.Type == EventType::Quit) || event.IsKeyPressed(Key::Escape))
-            {
-                window.StopEvent();
-            }
-        }
+    app.OnEvent = [&](const Event&) noexcept {};
 
+    app.OnUpdate = [&](float deltaTime) noexcept {
+        time += deltaTime;
+        };
+
+    app.OnRender = [&](PixelPainter& render, PixelCopier&) noexcept {
         render.SetColor(Color{ 10, 5, 15 });
         render.Clear();
 
@@ -102,11 +92,9 @@ int main()
 
             DrawCenteredSquare(render, centerX, centerY, size, Color{ r, g, b });
         }
+        };
 
-        time += 0.03f;
-
-        window.Present(frameBuffer.data(), bytesPerPixel, width, height);
-    }
+    app.Run();
 
     return 0;
 }
