@@ -1,11 +1,15 @@
 
-cmake_minimum_required(VERSION 4.0...4.5)
+cmake_minimum_required(VERSION 4.3)
 
 if(NOT DEFINED CMAKE_EXPERIMENTAL_CXX_IMPORT_STD)
-    set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD "f35a9ac6-8463-4d38-8eec-5d6008153e7d" CACHE STRING "")
+    set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD "f35a9ac6-8463-4d38-8eec-5d6008153e7d" CACHE STRING "Enable C++23 std module" FORCE)
 endif()
 
 project(DailyCppModules LANGUAGES CXX)
+
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+    set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Choose the type of build." FORCE)
+endif()
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -26,6 +30,7 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         -Wredundant-decls -Wsign-conversion -Wsign-promo -Wstrict-null-sentinel 
         -Wstrict-overflow=5 -Wswitch-default -Wzero-as-null-pointer-constant 
         -fstack-protector-strong
+        -Wno-system-headers
     )
     list(APPEND GLOBAL_COMPILE_DEFINITIONS _GLIBCXX_ASSERTIONS)
 endif()

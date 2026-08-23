@@ -1,5 +1,5 @@
 
-cmake_minimum_required(VERSION 4.4)
+cmake_minimum_required(VERSION 4.3)
 
 add_library(HighResTimer STATIC)
 

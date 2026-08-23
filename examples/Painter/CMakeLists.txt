@@ -1,5 +1,5 @@
 
-cmake_minimum_required(VERSION 4.4)
+cmake_minimum_required(VERSION 4.3)
 project(PainterExamples LANGUAGES CXX)
 
 add_library(AppPainter STATIC)
