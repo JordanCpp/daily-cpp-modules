@@ -5,13 +5,11 @@
 
 module;
 
-#include <bit>
-#include <utility>
-#include <cstdint>
-#include <expected>
 #include <Windows.h>
 
 export module OpenGL;
+
+import std;
 
 export using GLenum = std::uint32_t;
 export using GLuint = std::uint32_t;

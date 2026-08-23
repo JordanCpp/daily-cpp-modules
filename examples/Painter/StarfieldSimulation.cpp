@@ -3,14 +3,7 @@
 // (See accompanying file LICENSE_1_0.txt or copy at
 // https://boost.org)
 
-#include <memory_resource>
-#include <span>
-#include <vector>
-#include <cstdint>
-#include <iostream>
-#include <random>
-#include <algorithm>
-
+import std;
 import App;
 import WinLite;
 import PixelPainter;

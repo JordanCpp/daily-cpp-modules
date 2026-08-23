@@ -5,18 +5,9 @@
 
 module;
 
-#include <string>
-#include <vector>
-#include <span>
-#include <cstdint>
-#include <utility>
-#include <print>
-#include <optional>
-#include <functional>
-#include <memory>
-
 export module App;
 
+import std;
 import WinLite;
 import PixelPainter;
 import PixelCopier;
@@ -62,6 +53,9 @@ public:
 
         return true;
     }
+
+    [[nodiscard]] std::size_t GetWidth() const noexcept { return _width; }
+    [[nodiscard]] std::size_t GetHeight() const noexcept { return _height; }
 
     std::move_only_function<void(const Event&) noexcept> OnEvent = nullptr;
     std::move_only_function<void(float deltaTime) noexcept> OnUpdate = nullptr;

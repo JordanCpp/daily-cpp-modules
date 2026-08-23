@@ -5,14 +5,9 @@
 
 module;
 
-#include <memory_resource>
-#include <array>
-#include <cstddef>
-#include <cstdint>
-#include <ranges>
-
 export module WinLite.KeyMapper;
 
+import std;
 import WinLite.KeyEnums;
 
 export namespace WinLite

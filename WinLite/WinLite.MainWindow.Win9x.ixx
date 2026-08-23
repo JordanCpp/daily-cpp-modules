@@ -5,13 +5,9 @@
 
 module;
 
-#include <memory_resource>
-#include <string>
-#include <expected>
-#include <Windows.h>
-
 export module WinLite.MainWindow;
 
+import std;
 import WinLite.Queue;
 import WinLite.Events;
 import WinLite.KeyEnums;

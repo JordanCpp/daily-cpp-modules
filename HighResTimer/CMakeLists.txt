@@ -1,12 +1,13 @@
-cmake_minimum_required(VERSION 3.28)
 
-project(HighResTimer LANGUAGES CXX)
+cmake_minimum_required(VERSION 4.4)
 
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+add_library(HighResTimer STATIC)
 
-add_library(HighResTimer)
-
-target_sources(HighResTimer PUBLIC FILE_SET CXX_MODULES FILES "HighResTimer.ixx")
+target_sources(HighResTimer PUBLIC 
+    FILE_SET CXX_MODULES FILES "HighResTimer.ixx"
+)
 
 target_include_directories(HighResTimer INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
+
+target_compile_options(HighResTimer PRIVATE ${GLOBAL_COMPILE_OPTIONS})
+target_compile_definitions(HighResTimer PRIVATE ${GLOBAL_COMPILE_DEFINITIONS})

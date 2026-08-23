@@ -3,10 +3,7 @@
 // (See accompanying file LICENSE_1_0.txt or copy at
 // https://boost.org)
 
-#include <memory_resource>
-#include <print>
-#include <string>
-
+import std;
 import AppGL1;
 import WinLite;
 import OpenGL;

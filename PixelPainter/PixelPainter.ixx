@@ -5,13 +5,9 @@
 
 module;
 
-#include <span>
-#include <cmath>
-#include <cstdint>
-#include <algorithm>
-#include <stdexcept>
-
 export module PixelPainter;
+
+import std;
 
 export namespace Software
 {

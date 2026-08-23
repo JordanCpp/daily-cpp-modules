@@ -5,10 +5,7 @@
 
 module;
 
-#include <memory_resource>
-#include <chrono>
-#include <iostream>
-#include <string_view>
+import std;
 
 export module HighResTimer;
 

@@ -5,35 +5,33 @@
 
 module;
 
-#include <memory_resource>
-#include <cstdint>
-
 export module WinLite.Events;
 
+import std;
 import WinLite.KeyEnums;
 
 export namespace WinLite
 {
-	enum class ButtonState : uint8_t
+	enum class ButtonState : std::uint8_t
 	{
 		Released = 0,
 		Pressed  = 1
 	};
 
-	enum class MouseButton : uint8_t
+	enum class MouseButton : std::uint8_t
 	{
 		Left   = 1,
 		Right  = 2,
 		Middle = 3
 	};
 
-	enum class MouseScroll : uint8_t
+	enum class MouseScroll : std::uint8_t
 	{
 		Vertical   = 1,
 		Horizontal = 2
 	};
 
-	enum class EventType : uint8_t
+	enum class EventType : std::uint8_t
 	{
 		None = 0,
 		Quit = 1,

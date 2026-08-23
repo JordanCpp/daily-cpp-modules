@@ -1,12 +1,13 @@
-cmake_minimum_required(VERSION 3.28)
 
-project(FpsCounter LANGUAGES CXX)
+cmake_minimum_required(VERSION 4.4)
 
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+add_library(FpsCounter STATIC)
 
-add_library(FpsCounter)
-
-target_sources(FpsCounter PUBLIC FILE_SET CXX_MODULES FILES "FpsCounter.ixx")
+target_sources(FpsCounter PUBLIC 
+    FILE_SET CXX_MODULES FILES "FpsCounter.ixx"
+)
 
 target_include_directories(FpsCounter INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
+
+target_compile_options(FpsCounter PRIVATE ${GLOBAL_COMPILE_OPTIONS})
+target_compile_definitions(FpsCounter PRIVATE ${GLOBAL_COMPILE_DEFINITIONS})

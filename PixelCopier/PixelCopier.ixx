@@ -5,13 +5,9 @@
 
 module;
 
-#include <span>
-#include <cmath>
-#include <cstdint>
-#include <algorithm>
-#include <stdexcept>
-
 export module PixelCopier;
+
+import std;
 
 export namespace Software
 {
@@ -106,8 +102,8 @@ export namespace Software
                 return;
             }
 
-            const int64_t scaleX_fp = (static_cast<int64_t>(srcSubW) << 16) / screenW;
-            const int64_t scaleY_fp = (static_cast<int64_t>(srcSubH) << 16) / screenH;
+            const std::int64_t scaleX_fp = (static_cast<std::int64_t>(srcSubW) << 16) / screenW;
+            const std::int64_t scaleY_fp = (static_cast<std::int64_t>(srcSubH) << 16) / screenH;
 
             const bool dstHasAlpha = (_bytesPerPixel == 4);
             const bool srcHasAlpha = (bufferBytesPerPixel == 4);
@@ -118,7 +114,7 @@ export namespace Software
                 if (destY < 0) continue;
                 if (destY >= static_cast<int>(_height)) break;
 
-                const int relativeSrcY = srcY + static_cast<int>((static_cast<int64_t>(dy) * scaleY_fp) >> 16);
+                const int relativeSrcY = srcY + static_cast<int>((static_cast<std::int64_t>(dy) * scaleY_fp) >> 16);
                 if (relativeSrcY < 0 || relativeSrcY >= static_cast<int>(bufferHeight))
                 {
                     continue;
@@ -133,7 +129,7 @@ export namespace Software
                     if (destX < 0) continue;
                     if (destX >= static_cast<int>(_width)) break;
 
-                    const int relativeSrcX = srcX + static_cast<int>((static_cast<int64_t>(dx) * scaleX_fp) >> 16);
+                    const int relativeSrcX = srcX + static_cast<int>((static_cast<std::int64_t>(dx) * scaleX_fp) >> 16);
                     if (relativeSrcX < 0 || relativeSrcX >= static_cast<int>(bufferWidth))
                     {
                         continue;

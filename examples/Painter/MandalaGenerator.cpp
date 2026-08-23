@@ -3,12 +3,7 @@
 // (See accompanying file LICENSE_1_0.txt or copy at
 // https://boost.org)
 
-#include <memory_resource>
-#include <chrono>
-#include <cmath>
-#include <vector>
-#include <iostream>
-
+import std;
 import App;
 import WinLite;
 import PixelPainter;
@@ -61,8 +56,8 @@ int main()
             int yEnd = centerY + static_cast<int>(radius * std::sin(currentAngle));
 
             painter.SetColor(Color{
-                static_cast<uint8_t>(127 + 127 * std::sin(static_cast<double>(elapsed) + i)),
-                static_cast<uint8_t>(127 + 127 * std::cos(static_cast<double>(elapsed) * 0.5)),
+                static_cast<std::uint8_t>(127 + 127 * std::sin(static_cast<double>(elapsed) + i)),
+                static_cast<std::uint8_t>(127 + 127 * std::cos(static_cast<double>(elapsed) * 0.5)),
                 255,
                 255
                 });

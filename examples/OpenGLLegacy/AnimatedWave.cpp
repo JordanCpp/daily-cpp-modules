@@ -3,16 +3,7 @@
 // (See accompanying file LICENSE_1_0.txt or copy at
 // https://www.boost.org/LICENSE_1_0.txt)
 
-#include <memory_resource>
-#include <cmath>
-#include <chrono>
-#include <format>
-#include <iostream>
-#include <random>
-#include <string>
-#include <numbers>
-#include <print>
-
+import std;
 import AppGL1;
 import GlmLite;
 import WinLite;

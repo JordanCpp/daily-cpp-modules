@@ -5,11 +5,9 @@
 
 module;
 
-#include <string>
-#include <expected>
-
 export module WinLite.MainWindow;
 
+import std;
 import WinLite.Queue;
 import WinLite.Events;
 import WinLite.KeyMapper;

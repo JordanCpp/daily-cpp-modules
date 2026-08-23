@@ -5,14 +5,11 @@
 
 module;
 
-#include <memory_resource>
-#include <string>
-#include <utility>
-#include <expected>
 #include <Windows.h>
 
 export module WinLite.OpenGL1Window;
 
+import std;
 import WinLite.Events;
 import WinLite.MainWindow;
 

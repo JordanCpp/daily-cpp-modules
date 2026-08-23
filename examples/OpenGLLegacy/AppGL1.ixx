@@ -5,13 +5,9 @@
 
 module;
 
-#include <string>
-#include <utility>
-#include <print>
-#include <optional>
-#include <functional>
-
 export module AppGL1;
+
+import std;
 
 import WinLite;
 import OpenGL;
@@ -22,6 +18,10 @@ using namespace WinLite;
 export class AppGL1
 {
 public:
+    std::move_only_function<void(const Event&) noexcept> OnEvent = nullptr;
+    std::move_only_function<void(float deltaTime) noexcept> OnUpdate = nullptr;
+    std::move_only_function<void() noexcept> OnRender = nullptr;
+
     AppGL1() noexcept
         : OnEvent(nullptr)
         , OnUpdate(nullptr)
@@ -33,10 +33,13 @@ public:
     {
     }
 
-    bool Init(std::size_t width = 800, std::size_t height = 600, const std::string& title = "")
+    [[nodiscard]] std::size_t GetWidth() const noexcept { return _width; }
+    [[nodiscard]] std::size_t GetHeight() const noexcept { return _height; }
+
+    bool Init(std::size_t targetWidth = 800, std::size_t targetHeight = 600, const std::string& title = "")
     {
-        _width = width;
-        _height = height;
+        _width  = targetWidth;
+        _height = targetHeight;
 
         auto windowResult = OpenGL1Window::Create(_width, _height, title);
         if (!windowResult)
@@ -51,20 +54,30 @@ public:
         glViewport(0, 0, static_cast<GLsizei>(_width), static_cast<GLsizei>(_height));
 
         return true;
-    }
 
-    std::move_only_function<void(const Event&) noexcept> OnEvent = nullptr;
-    std::move_only_function<void(float deltaTime) noexcept> OnUpdate = nullptr;
-    std::move_only_function<void() noexcept> OnRender = nullptr;
+    }
 
     void Run() noexcept
     {
-        if (!_window || !_glLoader) return;
-
+        if (!_window || !_glLoader)
+        {
+            return;
+        }
         FpsCounter counter;
+        auto lastTime = std::chrono::steady_clock::now();
 
         while (_window->IsRunning())
         {
+            const auto currentTime = std::chrono::steady_clock::now();
+            const std::chrono::duration<float> elapsed = currentTime - lastTime;
+            lastTime = currentTime;
+
+            float deltaTime = elapsed.count();
+            if (deltaTime > 0.1f)
+            {
+                deltaTime = 0.1f;
+            }
+
             Event event;
             while (_window->GetEvent(event))
             {
@@ -81,7 +94,7 @@ public:
 
             if (OnUpdate)
             {
-                OnUpdate(0.016f);
+                OnUpdate(deltaTime);
             }
 
             glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -99,6 +112,7 @@ public:
                 _window->SetTitle(std::to_string(counter.GetFps()));
             }
         }
+
     }
 
 private:

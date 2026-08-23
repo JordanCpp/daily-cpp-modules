@@ -5,10 +5,6 @@
 
 module;
 
-#include <memory_resource>
-#include <string>
-#include <expected>
-
 #ifndef NOMINMAX
     #define NOMINMAX
 #endif
@@ -18,6 +14,8 @@ module;
 #include <Windows.h>
 
 export module WinLite.MainWindow;
+
+import std;
 
 import WinLite.Queue;
 import WinLite.Events;

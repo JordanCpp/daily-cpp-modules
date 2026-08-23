@@ -5,11 +5,9 @@
 
 module;
 
-#include <memory_resource>
-#include <queue>
-
 export module WinLite.Queue;
 
+import std;
 import WinLite.Events;
 
 export namespace WinLite

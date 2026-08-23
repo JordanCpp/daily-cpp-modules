@@ -5,9 +5,9 @@
 
 module;
 
-#include <memory_resource>
-
 export module WinLite;
+
+import std;
 
 export import WinLite.Events;
 export import WinLite.KeyEnums;

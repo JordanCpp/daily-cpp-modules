@@ -5,7 +5,7 @@
 
 module;
 
-#include <math.h>
+import std;
 
 export module GlmLite;
 
@@ -340,12 +340,12 @@ export namespace glm
 
     inline f32 length(const vec3& v)
     {
-        return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+        return std::sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
     }
 
     inline f32 length(const vec4& v)
     {
-        return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w);
+        return std::sqrtf(v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w);
     }
 
     inline f32 dot(const vec3& a, const vec3& b)
@@ -397,8 +397,8 @@ export namespace glm
 
     inline mat4 rotate(const mat4& m, f32 angle, const vec3& axis)
     {
-        f32 c = cosf(angle);
-        f32 s = sinf(angle);
+        f32 c = std::cosf(angle);
+        f32 s = std::sinf(angle);
         f32 t = 1.0f - c;
         vec3 a = normalize(axis);
 
@@ -420,7 +420,7 @@ export namespace glm
 
     inline mat4 perspective(f32 fov, f32 aspect, f32 nearV, f32 farV)
     {
-        f32 tanHalfFov = tanf(fov / 2.0f);
+        f32 tanHalfFov = std::tanf(fov / 2.0f);
         mat4 res(0.0f);
         res.col[0][0] = 1.0f / (aspect * tanHalfFov);
         res.col[1][1] = 1.0f / (tanHalfFov);

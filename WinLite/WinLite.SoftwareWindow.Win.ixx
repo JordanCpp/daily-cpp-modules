@@ -5,15 +5,11 @@
 
 module;
 
-#include <memory_resource>
-#include <cstdint>
-#include <string>
-#include <utility>
-#include <expected>
 #include <Windows.h>
 
 export module WinLite.SoftwareWindow;
 
+import std;
 import WinLite.Events;
 import WinLite.MainWindow;
 

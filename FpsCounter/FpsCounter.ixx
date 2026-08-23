@@ -5,9 +5,7 @@
 
 module;
 
-#include <memory_resource>
-#include <cstdint>
-#include <chrono>
+import std;
 
 export module FpsCounter;
 

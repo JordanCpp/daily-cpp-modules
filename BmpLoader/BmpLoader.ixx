@@ -5,14 +5,7 @@
 
 module;
 
-#include <memory_resource>
-#include <cstdint>
-#include <vector>
-#include <expected>
-#include <fstream>
-#include <filesystem>
-#include <cmath>
-#include <limits>
+import std;
 
 export module BmpLoader;
 

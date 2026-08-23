@@ -1,13 +1,13 @@
 
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 4.4)
 
-project(PixelPainter LANGUAGES CXX)
+add_library(PixelPainter STATIC)
 
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-add_library(PixelPainter)
-
-target_sources(PixelPainter PUBLIC FILE_SET CXX_MODULES FILES "PixelPainter.ixx" )
+target_sources(PixelPainter PUBLIC 
+    FILE_SET CXX_MODULES FILES "PixelPainter.ixx"
+)
 
 target_include_directories(PixelPainter INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
+
+target_compile_options(PixelPainter PRIVATE ${GLOBAL_COMPILE_OPTIONS})
+target_compile_definitions(PixelPainter PRIVATE ${GLOBAL_COMPILE_DEFINITIONS})

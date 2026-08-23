@@ -5,14 +5,9 @@
 
 module;
 
-#include <cstdint>
-#include <vector>
-#include <expected>
-#include <fstream>
-#include <filesystem>
-#include <limits>
-
 export module TgaLoader;
+
+import std;
 
 export namespace TgaLoader
 {

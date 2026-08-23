@@ -5,12 +5,9 @@
 
 module;
 
-#include <string>
-#include <utility>
-#include <expected>
-
 export module WinLite.SoftwareWindow;
 
+import std;
 import WinLite.Events;
 import WinLite.MainWindow;
 

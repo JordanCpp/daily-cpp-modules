@@ -1,12 +1,13 @@
-cmake_minimum_required(VERSION 3.28)
 
-project(GlmLite LANGUAGES CXX)
+cmake_minimum_required(VERSION 4.4)
 
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+add_library(GlmLite STATIC)
 
-add_library(GlmLite)
-
-target_sources(GlmLite PUBLIC FILE_SET CXX_MODULES FILES "GlmLite.ixx")
+target_sources(GlmLite PUBLIC 
+    FILE_SET CXX_MODULES FILES "GlmLite.ixx"
+)
 
 target_include_directories(GlmLite INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
+
+target_compile_options(GlmLite PRIVATE ${GLOBAL_COMPILE_OPTIONS})
+target_compile_definitions(GlmLite PRIVATE ${GLOBAL_COMPILE_DEFINITIONS})
