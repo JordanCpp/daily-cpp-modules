@@ -13,10 +13,10 @@
 #include <numbers>
 #include <print>
 
+import AppGL1;
 import GlmLite;
 import WinLite;
 import OpenGL;
-import FpsCounter;
 
 using namespace WinLite;
 
@@ -34,9 +34,9 @@ struct WavePoint {
     float r, g, b;
 };
 
-void setMatrix(GLenum matrixMode, const glm::mat4& matrix);
-void initWave(float time);
-void updateWave(float time);
+void setMatrix(GLenum matrixMode, const glm::mat4& matrix) noexcept;
+void initWave(float time) noexcept;
+void updateWave(float time) noexcept;
 
 static WavePoint computeWavePoint(int i, int j, float time) noexcept
 {
@@ -65,13 +65,13 @@ static WavePoint computeWavePoint(int i, int j, float time) noexcept
     return { y, r * twinkle, g * twinkle, b * twinkle };
 }
 
-void setMatrix(GLenum matrixMode, const glm::mat4& matrix)
+void setMatrix(GLenum matrixMode, const glm::mat4& matrix) noexcept
 {
     glMatrixMode(matrixMode);
     glLoadMatrixf(glm::value_ptr(matrix));
 }
 
-void initWave(float time)
+void initWave(float time) noexcept
 {
     for (int i = 0; i < GRID_SIZE; ++i)
     {
@@ -95,7 +95,7 @@ void initWave(float time)
     }
 }
 
-void updateWave(float time)
+void updateWave(float time) noexcept
 {
     for (int i = 0; i < GRID_SIZE; ++i)
     {
@@ -117,18 +117,11 @@ int main()
     constexpr std::size_t width = 1024;
     constexpr std::size_t height = 768;
 
-    auto windowResult = OpenGL1Window::Create(width, height, "OpenGL 1.2 - Animated Wave (100x100 points)");
-
-    if (!windowResult)
+    AppGL1 app;
+    if (!app.Init(width, height, "OpenGL 1.2 - Animated Wave (100x100 points)"))
     {
-        std::println("Error: {}", windowResult.error());
         return -1;
     }
-
-    OpenGL1Window window = std::move(*windowResult);
-    OpenGLLoader loader(1, 2);
-
-    glViewport(0, 0, static_cast<GLsizei>(width), static_cast<GLsizei>(height));
 
     const glm::mat4 projectionMatrix = glm::perspective(
         glm::radians(50.0f),
@@ -158,53 +151,37 @@ int main()
     glVertexPointer(3, GL_FLOAT, 0, waveVertices);
     glColorPointer(3, GL_FLOAT, 0, waveColors);
 
-    auto lastTime = std::chrono::steady_clock::now();
     float cameraAngle = 0.0f;
     bool autoRotate = true;
 
-    FpsCounter counter;
-
-    while (window.IsRunning())
-    {
-        const auto currentTime = std::chrono::steady_clock::now();
-        float deltaTime = static_cast<float>(std::chrono::duration<float>(currentTime - lastTime).count());
-        lastTime = currentTime;
-
-        if (deltaTime > 0.1f) deltaTime = 0.1f;
-
-        Event event;
-        while (window.GetEvent(event))
+    app.OnEvent = [&](const Event& event) noexcept {
+        if (event.IsKeyPressed(Key::Space))
         {
-            if ((event.Type == EventType::Quit) || event.IsKeyPressed(Key::Escape))
-            {
-                window.StopEvent();
-            }
-
-            if (event.IsKeyPressed(Key::Space))
-            {
-                autoRotate = !autoRotate;
-            }
-
-            if (event.IsKeyPressed(Key::R))
-            {
-                cameraAngle = 0.0f;
-                viewMatrix = glm::lookAt(
-                    glm::vec3(2.0f, 1.5f, 3.0f),
-                    glm::vec3(0.0f, 0.0f, 0.0f),
-                    glm::vec3(0.0f, 1.0f, 0.0f)
-                );
-            }
+            autoRotate = !autoRotate;
         }
 
-        time += deltaTime;
-        updateWave(time);
+        if (event.IsKeyPressed(Key::R))
+        {
+            cameraAngle = 0.0f;
+            viewMatrix = glm::lookAt(
+                glm::vec3(2.0f, 1.5f, 3.0f),
+                glm::vec3(0.0f, 0.0f, 0.0f),
+                glm::vec3(0.0f, 1.0f, 0.0f)
+            );
+            glLoadMatrixf(glm::value_ptr(viewMatrix));
+        }
+        };
 
-        glClearColor(0.0f, 0.02f, 0.05f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    app.OnUpdate = [&](float deltaTime) noexcept {
+        float fixedDelta = deltaTime;
+        if (fixedDelta > 0.1f) fixedDelta = 0.1f;
+
+        time += fixedDelta;
+        updateWave(time);
 
         if (autoRotate)
         {
-            cameraAngle += deltaTime * 0.3f;
+            cameraAngle += fixedDelta * 0.3f;
             if (cameraAngle > 2.0f * std::numbers::pi_v<float>)
             {
                 cameraAngle -= 2.0f * std::numbers::pi_v<float>;
@@ -224,19 +201,15 @@ int main()
                 glm::vec3(0.0f, 0.0f, 0.0f),
                 glm::vec3(0.0f, 1.0f, 0.0f)
             );
-
-            glLoadMatrixf(glm::value_ptr(viewMatrix));
         }
+        };
 
+    app.OnRender = [&]() noexcept {
+        glLoadMatrixf(glm::value_ptr(viewMatrix));
         glDrawArrays(GL_POINTS, 0, POINTS_COUNT);
-        window.Present();
+        };
 
-        if (counter.Update())
-        {
-            const std::string title = std::format("{} FPS | Points: {} | {} | [Space] Toggle Rotation | [R] Reset", counter.GetFps(), POINTS_COUNT, autoRotate ? "[Auto Rotate ON]" : "[Auto Rotate OFF]");
-            window.SetTitle(title);
-        }
-    }
+    app.Run();
 
     glDisableClientState(GL_COLOR_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);
