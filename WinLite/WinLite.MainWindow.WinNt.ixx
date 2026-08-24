@@ -41,12 +41,12 @@ export namespace WinLite
         {
             if (utf8.empty())
             {
-                return L"";
+                return {};
             }
 
             if (utf8.size() > static_cast<std::size_t>(std::numeric_limits<int>::max()))
             {
-                return L"";
+                return {};
             }
 
             const int utf8_size = static_cast<int>(utf8.size());
@@ -54,16 +54,18 @@ export namespace WinLite
 
             if (size_needed <= 0)
             {
-                return L"";
+                return {};
             }
 
             const std::wstring::size_type alloc_size = static_cast<std::wstring::size_type>(size_needed);
-            std::wstring wstrTo(alloc_size, L'\0');
 
-            const int result = MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), utf8_size, &wstrTo[0], size_needed);
+            std::wstring wstrTo;
+            wstrTo.resize(alloc_size);
+
+            const int result = MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), utf8_size, wstrTo.data(), size_needed);
             if (result <= 0)
             {
-                return L"";
+                return {};
             }
 
             return wstrTo;

@@ -34,12 +34,12 @@ export namespace WinLite
 
 		[[nodiscard]] constexpr Key FindKey(std::uint32_t scanCode) const noexcept
 		{
-			auto it = std::ranges::find_if(Table.begin(), Table.begin() + Current,
-				[scanCode](const KeyMap& item) { return item.Code == scanCode; });
-
-			if (it != Table.begin() + Current)
+			for (std::size_t i = 0; i < Current; ++i)
 			{
-				return it->Key;
+				if (Table[i].Code == scanCode)
+				{
+					return Table[i].Key;
+				}
 			}
 
 			return Key::Unknown;
