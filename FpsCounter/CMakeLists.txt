@@ -1,5 +1,5 @@
 
-cmake_minimum_required(VERSION 4.3)
+cmake_minimum_required(VERSION 3.30)
 
 add_library(FpsCounter STATIC)
 

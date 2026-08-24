@@ -1,5 +1,5 @@
 
-cmake_minimum_required(VERSION 4.3)
+cmake_minimum_required(VERSION 3.30)
 project(OpenGLLegacyExamples LANGUAGES CXX)
 
 add_library(AppGL1 STATIC)
