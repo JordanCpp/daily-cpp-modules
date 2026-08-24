@@ -5,7 +5,21 @@
 
 module;
 
-#include <Windows.h>
+#ifdef _WIN32
+    #ifdef __GNUC__
+    #include <bits/c++config.h>
+    #endif
+
+    #ifndef WIN32_LEAN_AND_MEAN
+        #define WIN32_LEAN_AND_MEAN
+    #endif
+
+    #ifndef NOMINMAX
+        #define NOMINMAX
+    #endif
+
+    #include <Windows.h>
+#endif
 
 export module OpenGL;
 
@@ -6413,7 +6427,7 @@ private:
 void* OpenGLLoader::get_proc_address(const char* name)
 {
 #ifdef _WIN32
-    static HMODULE opengl32 = LoadLibraryW(L"opengl32.dll");
+    static HMODULE opengl32 = LoadLibrary("opengl32.dll");
     if (!opengl32) return nullptr;
 
     auto proc = reinterpret_cast<void*>(GetProcAddress(opengl32, name));

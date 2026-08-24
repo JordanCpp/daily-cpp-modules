@@ -5,6 +5,18 @@
 
 module;
 
+#ifdef __GNUC__
+    #include <bits/c++config.h>
+#endif
+
+#ifndef NOMINMAX
+    #define NOMINMAX
+#endif
+
+#ifndef WIN32_LEAN_AND_MEAN
+    #define WIN32_LEAN_AND_MEAN
+#endif
+
 #include <Windows.h>
 
 export module WinLite.SoftwareWindow;

@@ -87,7 +87,7 @@ int main() {
 ## Prerequisites
 
 * **CMake 3.30+** (Strictly required for stable C++23 Standard Library Modules support via `import std;`)
-* **Compilers:** MSVC 2026+ (Windows) or GCC 16.2+ (Linux/MinGW)
+* **Compilers:** MSVC 2026+ (Windows) or GCC 16.2+ (32/64) (Linux/MinGW)
 
 ## 🛠️ Building & Testing Locally
 

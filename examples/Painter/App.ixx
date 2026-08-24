@@ -129,7 +129,7 @@ public:
 
                         std::span<const std::uint8_t> pixelSpan(_frameBuffer.data(), _frameBuffer.size());
 
-                        auto saveResult = BmpSaver::Save(screenshotPath, _width, _height, _bytesPerPixel, pixelSpan);
+                        auto saveResult = BmpSaver::Save(screenshotPath, static_cast<std::uint32_t>(_width), static_cast<std::uint32_t>(_height), _bytesPerPixel, pixelSpan);
 
                         if (!saveResult.has_value())
                         {
