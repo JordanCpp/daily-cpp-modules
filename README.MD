@@ -84,6 +84,11 @@ int main() {
 
 ---
 
+## Prerequisites
+
+* **CMake 3.30+** (Strictly required for stable C++23 Standard Library Modules support via `import std;`)
+* **Compilers:** MSVC 2026+ (Windows) or GCC 16.2+ (Linux/MinGW)
+
 ## 🛠️ Building & Testing Locally
 
 To build the entire ecosystem and run validation tests for all modules simultaneously, ensure you have a compiler with robust C++23 module support (MSVC v143+, Clang 16+, or GCC 14+) and **Ninja**.
@@ -110,9 +115,10 @@ cmake --build build
 | [`PixelCopier`](./PixelCopier) | Software rasterizer for fast pixel blitting. | `export module`, `import std;`, SIMD-friendly |
 | [`GlmLite`](./GlmLite) | Ultra-lightweight vector math & linear algebra primitives. | `export module`, `import std;` |
 | [`OpenGL`](./OpenGL) | Ultra-lightweight OpenGL extension loader (GLAD alternative). | `export module`, `import std;`, `GetProcAddress` |
-| [`BmpLoader`](./BmpLoader) | Zero-dependency BMP image loader (24-bit and 32-bit support). | `export module`, `import std;`, `std::vector` |
-| [`TgaLoader`](./TgaLoader) | Fast TGA image loader (24-bit and 32-bit, raw & RLE support). | `export module`, `import std;`, `std::span` |
-| [`HighResTimer`](./HighResTimer) | High-resolution performance timer / stopwatch for benchmarking. | `export module`, `import std;`, `std::chrono` |
+| [`BmpLoader`](./BmpLoader) | Zero-dependency BMP image loader (24-bit and 32-bit support). | `export module`, `import std;` |
+| [`TgaLoader`](./TgaLoader) | Fast TGA image loader (24-bit and 32-bit, raw & RLE support). | `export module`, `import std;` |
+| [`HighResTimer`](./HighResTimer) | High-resolution performance timer / stopwatch for benchmarking. | `export module`, `import std;` |
+| [`BmpSaver`](./BmpSaver) | BMP image writer and exporter supporting various color depths. | `export module`, `import std;` |
 
 ---
 
