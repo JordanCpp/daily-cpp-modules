@@ -23,6 +23,9 @@ target_compile_options(AppPainter PRIVATE ${GLOBAL_COMPILE_OPTIONS})
 target_compile_definitions(AppPainter PRIVATE ${GLOBAL_COMPILE_DEFINITIONS})
 
 set(TARGET_NAMES
+    CosmicPlasma
+    StarfieldWarp
+    CyberpunkMatrix
     AppTemplate
     SinePlasma
     3DHyperTunnel

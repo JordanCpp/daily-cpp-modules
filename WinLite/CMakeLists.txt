@@ -10,6 +10,7 @@ if(WIN32)
         "WinLite.MainWindow.WinNt.ixx"
         "WinLite.SoftwareWindow.Win.ixx"
         "WinLite.OpenGL1Window.Win.ixx"
+        "WinLite.OpenGL3Window.Win.ixx"
     )
     target_link_libraries(${PROJECT_NAME} PRIVATE opengl32)
 else()

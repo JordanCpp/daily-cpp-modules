@@ -13,3 +13,4 @@ export import WinLite.Events;
 export import WinLite.KeyEnums;
 export import WinLite.SoftwareWindow;
 export import WinLite.OpenGL1Window;
+export import WinLite.OpenGL3Window;
