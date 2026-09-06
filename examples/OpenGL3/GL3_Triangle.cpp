@@ -1,10 +1,13 @@
 // Copyright 2026-present Evgeny Zoshchuk (JordanCpp).
 // Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
+// https://boost.org)
 
 import std;
 import AppGL3;
 import WinLite;
 import OpenGL;
+import GlmLite;
 
 using namespace WinLite;
 
@@ -21,7 +24,6 @@ const Vertex vertices[] =
     { 0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f }
 };
 
-// Шейдеры (строки на языке GLSL)
 const char* vertexShaderSource = R"(
     #version 330 core
     layout (location = 0) in vec3 aPos;
