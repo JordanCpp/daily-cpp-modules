@@ -454,7 +454,7 @@ export namespace WinLite
             case WM_SYSKEYDOWN:
                 event.Type = EventType::Keyboard;
                 event.Keyboard.State = ButtonState::Pressed;
-                event.Keyboard.Key = _keyMapper.FindKey(static_cast<std::uint32_t>(WParam));
+                event.Keyboard.KeyCode = _keyMapper.FindKey(static_cast<std::uint32_t>(WParam));
                 _events.Push(event);
                 return 0;
 
@@ -462,7 +462,7 @@ export namespace WinLite
             case WM_SYSKEYUP:
                 event.Type = EventType::Keyboard;
                 event.Keyboard.State = ButtonState::Released;
-                event.Keyboard.Key = _keyMapper.FindKey(static_cast<std::uint32_t>(WParam));
+                event.Keyboard.KeyCode = _keyMapper.FindKey(static_cast<std::uint32_t>(WParam));
                 _events.Push(event);
                 return 0;
 

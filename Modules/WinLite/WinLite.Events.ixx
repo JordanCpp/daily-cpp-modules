@@ -67,7 +67,7 @@ export namespace WinLite
 	public:
 		EventType   Type;
 		ButtonState State;
-		Key         Key;
+		Key         KeyCode;
 	};
 
 	class Resize
@@ -108,12 +108,12 @@ export namespace WinLite
 
 		bool IsKeyPressed(Key key) const
 		{
-			return (Type == EventType::Keyboard && Keyboard.Key == key && Keyboard.State == ButtonState::Pressed);
+			return (Type == EventType::Keyboard && Keyboard.KeyCode == key && Keyboard.State == ButtonState::Pressed);
 		}
 
 		bool IsKeyReleased(Key key) const
 		{
-			return (Type == EventType::Keyboard && Keyboard.Key == key && Keyboard.State == ButtonState::Released);
+			return (Type == EventType::Keyboard && Keyboard.KeyCode == key && Keyboard.State == ButtonState::Released);
 		}
 
 		bool IsMousePressed(MouseButton button) const
