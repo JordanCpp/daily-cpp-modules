@@ -97,13 +97,13 @@ export namespace WinLite
 	public:
 		union
 		{
-			EventType   Type = EventType::None;
-			Quit        Quit;
-			Mouse       Mouse;
-			Resize      Resize;
-			Keyboard    Keyboard;
-			GainedFocus GainedFocus;
-			LostFocus   LostFocus;
+			EventType Type = EventType::None;
+			WinLite::Quit        Quit;
+			WinLite::Mouse       Mouse;
+			WinLite::Resize      Resize;
+			WinLite::Keyboard    Keyboard;
+			WinLite::GainedFocus GainedFocus;
+			WinLite::LostFocus   LostFocus;
 		};
 
 		bool IsKeyPressed(Key key) const

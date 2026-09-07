@@ -14,7 +14,7 @@ export namespace WinLite
 {
 	struct KeyMap
 	{
-		Key           Key{ Key::Unknown };
+		Key           KeyCode{ Key::Unknown };
 		std::uint32_t Code{ 0 };
 	};
 
@@ -27,7 +27,7 @@ export namespace WinLite
 		{
 			if (Current < Table.size())
 			{
-				Table[Current] = KeyMap{ .Key = key, .Code = code };
+				Table[Current] = KeyMap{ .KeyCode = key, .Code = code };
 				Current++;
 			}
 		}
@@ -38,7 +38,7 @@ export namespace WinLite
 			{
 				if (Table[i].Code == scanCode)
 				{
-					return Table[i].Key;
+					return Table[i].KeyCode;
 				}
 			}
 
