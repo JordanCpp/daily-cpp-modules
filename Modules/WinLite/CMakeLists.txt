@@ -15,8 +15,10 @@ if(WIN32)
     target_link_libraries(${PROJECT_NAME} PRIVATE opengl32)
 else()
     set(OS_SPECIFIC_MODULES
-        "WinLite.MainWindow.Linux.ixx"
-        "WinLite.SoftwareWindow.Linux.ixx"
+        "WinLite.MainWindow.XLib.ixx"
+        "WinLite.SoftwareWindow.XLib.ixx"
+        "WinLite.OpenGL1Window.XLib.ixx"
+        "WinLite.OpenGL3Window.XLib.ixx"
     )
 endif()
 

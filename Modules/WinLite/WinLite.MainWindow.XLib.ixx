@@ -8,22 +8,37 @@ module;
 export module WinLite.MainWindow;
 
 import std;
+
 import WinLite.Queue;
 import WinLite.Events;
+import WinLite.KeyEnums;
 import WinLite.KeyMapper;
 
 export namespace WinLite
 {
     class MainWindow
     {
+    private:
     public:
         void InitKeyMapper()
         {
         }
 
-        static std::expected<MainWindow, std::string> Create(int w, int h, const std::string& title)
+        static std::expected<MainWindow, std::string> Create(std::size_t w, std::size_t h, const std::string& title)
         {
             MainWindow window;
+
+            if (w == 0)
+            {
+                return std::unexpected("");
+            }
+
+            if (h == 0)
+            {
+                return std::unexpected("");
+            }
+
+            window.SetTitle(title);
 
             return window;
         }
@@ -33,8 +48,10 @@ export namespace WinLite
         }
 
         MainWindow(MainWindow&& other) noexcept :
-            _events(std::move(other._events))
+            _events(std::move(other._events)),
+            _keyMapper{}
         {
+
             InitKeyMapper();
         }
 
@@ -43,6 +60,7 @@ export namespace WinLite
             if (this != &other)
             {
                 _events = std::move(other._events);
+                _keyMapper = std::move(other._keyMapper);
             }
 
             return *this;
@@ -79,6 +97,13 @@ export namespace WinLite
             return _events.IsRunning();
         }
 
+        void SetTitle(const std::string& title)
+        {
+            if (!title.empty())
+            {
+            }
+        }
+
         MainWindow(const MainWindow&) = delete;
         MainWindow& operator=(const MainWindow&) = delete;
 
@@ -86,7 +111,9 @@ export namespace WinLite
         Queue     _events;
         KeyMapper _keyMapper;
 
-        explicit MainWindow()
+        explicit MainWindow() :
+            _events{},
+            _keyMapper{}
         {
         }
     };

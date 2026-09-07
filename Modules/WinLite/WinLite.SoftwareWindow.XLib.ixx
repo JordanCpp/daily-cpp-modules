@@ -19,7 +19,7 @@ export namespace WinLite
 		MainWindow _impl;
 
 		explicit SoftwareWindow(MainWindow&& impl) :
-			_impl(std::move(impl)) 
+			_impl(std::move(impl))
 		{
 		}
 
@@ -29,7 +29,7 @@ export namespace WinLite
 		SoftwareWindow(const SoftwareWindow&) = delete;
 		SoftwareWindow& operator=(const SoftwareWindow&) = delete;
 
-		static std::expected<SoftwareWindow, std::string> Create(int w, int h, const std::string& title)
+		static std::expected<SoftwareWindow, std::string> Create(std::size_t w, std::size_t h, const std::string& title)
 		{
 			auto result = MainWindow::Create(w, h, title);
 
@@ -41,11 +41,9 @@ export namespace WinLite
 			return SoftwareWindow(std::move(*result));
 		}
 
-		~SoftwareWindow()
-		{
-		}
+		~SoftwareWindow() = default;
 
-		bool IsRunning()
+		bool IsRunning() const
 		{
 			return _impl.IsRunning();
 		}
@@ -60,8 +58,28 @@ export namespace WinLite
 			return _impl.GetEvent(event);
 		}
 
-		void Present(uint8_t* pixels, uint8_t bytes, int w, int h)
+		void SetTitle(const std::string& title)
 		{
+			_impl.SetTitle(title);
+		}
+
+		void Present(const std::uint8_t* pixels, std::uint8_t bytes, std::size_t w, std::size_t h)
+		{
+			if (pixels)
+			{
+			}
+
+			if (bytes)
+			{
+			}
+
+			if (w)
+			{
+			}
+
+			if (h)
+			{
+			}
 		}
 	};
 }
