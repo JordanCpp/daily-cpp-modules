@@ -18,9 +18,9 @@ export namespace Software
     inline constexpr std::size_t idxG = 1;
     inline constexpr std::size_t idxB = 0;
 #else
-    inline constexpr std::size_t idxR = 0;
+    inline constexpr std::size_t idxR = 2;
     inline constexpr std::size_t idxG = 1;
-    inline constexpr std::size_t idxB = 2;
+    inline constexpr std::size_t idxB = 0;
 #endif
     inline constexpr std::size_t idxA = 3;
 

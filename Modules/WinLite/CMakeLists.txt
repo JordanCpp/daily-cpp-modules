@@ -20,6 +20,7 @@ else()
         "WinLite.OpenGL1Window.XLib.ixx"
         "WinLite.OpenGL3Window.XLib.ixx"
     )
+    target_link_libraries(${PROJECT_NAME} PRIVATE GL X11)
 endif()
 
 target_sources(${PROJECT_NAME} PUBLIC FILE_SET CXX_MODULES FILES 

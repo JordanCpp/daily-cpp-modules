@@ -19,6 +19,10 @@ module;
     #endif
 
     #include <Windows.h>
+#else
+extern "C" {
+    void (*glXGetProcAddressARB(const unsigned char* procName))();
+}
 #endif
 
 export module OpenGL;
@@ -6455,9 +6459,11 @@ void* OpenGLLoader::get_proc_address(const char* name)
 
     return proc;
 #else
-    return nullptr;
+   auto proc_func = glXGetProcAddressARB(reinterpret_cast<const unsigned char*>(name));
+    return std::bit_cast<void*>(proc_func);
 #endif
 }
+
 
 OpenGLLoader::OpenGLLoader(int major, int minor) : 
     m_major(major), m_minor(minor) 
