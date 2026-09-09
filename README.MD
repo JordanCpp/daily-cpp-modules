@@ -110,7 +110,7 @@ cmake --build build
 
 | Module | Purpose / Domain | Key C++ Features Used |
 |:---|:---|:---|
-| [`WinLite`](./WinLite) | Lightweight Win32 window, event loop, input, and OpenGL context. | `export module`, `import std;`, Win32 API |
+| [`WinLite`](./WinLite) | Lightweight Win32/XLib window, event loop, input, and OpenGL context. | `export module`, `import std;`, Win32 API/XLib |
 | [`PixelPainter`](./PixelPainter) | Software rasterizer for primitives. | `export module`, `import std;`, SIMD-friendly |
 | [`PixelCopier`](./PixelCopier) | Software rasterizer for fast pixel blitting. | `export module`, `import std;`, SIMD-friendly |
 | [`GlmLite`](./GlmLite) | Ultra-lightweight vector math & linear algebra primitives. | `export module`, `import std;` |
