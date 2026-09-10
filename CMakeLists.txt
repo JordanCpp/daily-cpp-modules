@@ -31,21 +31,6 @@ set(CMAKE_CXX_MODULE_STD ON)
 set(GLOBAL_COMPILE_OPTIONS "")
 set(GLOBAL_COMPILE_DEFINITIONS "")
 
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    list(APPEND GLOBAL_COMPILE_OPTIONS 
-        -fmodules-ts
-        -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Weffc++ 
-        -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization 
-        -Wformat=2 -Winit-self -Wlogical-op -Wmissing-declarations 
-        -Wmissing-include-dirs -Wnoexcept -Wold-style-cast -Woverloaded-virtual 
-        -Wredundant-decls -Wsign-conversion -Wsign-promo -Wstrict-null-sentinel 
-        -Wstrict-overflow=2 -Wswitch-default -Wzero-as-null-pointer-constant 
-        -fstack-protector-strong
-        -Wno-system-headers
-    )
-    list(APPEND GLOBAL_COMPILE_DEFINITIONS _GLIBCXX_ASSERTIONS)
-endif()
-
 add_subdirectory(Modules)
 
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/examples/CMakeLists.txt")

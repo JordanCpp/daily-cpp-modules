@@ -7,7 +7,5 @@ target_sources(BmpSaver PUBLIC
     FILE_SET CXX_MODULES FILES " BmpSaver.ixx"
 )
 
+target_compile_features(BmpSaver PUBLIC cxx_std_23)
 target_include_directories(BmpSaver INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
-
-target_compile_options(BmpSaver PRIVATE ${GLOBAL_COMPILE_OPTIONS})
-target_compile_definitions(BmpSaver PRIVATE ${GLOBAL_COMPILE_DEFINITIONS})

@@ -7,7 +7,5 @@ target_sources(TgaLoader PUBLIC
     FILE_SET CXX_MODULES FILES "TgaLoader.ixx"
 )
 
+target_compile_features(TgaLoader PUBLIC cxx_std_23)
 target_include_directories(TgaLoader INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
-
-target_compile_options(TgaLoader PRIVATE ${GLOBAL_COMPILE_OPTIONS})
-target_compile_definitions(TgaLoader PRIVATE ${GLOBAL_COMPILE_DEFINITIONS})

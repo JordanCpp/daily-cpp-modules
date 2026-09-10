@@ -32,7 +32,5 @@ target_sources(${PROJECT_NAME} PUBLIC FILE_SET CXX_MODULES FILES
     ${OS_SPECIFIC_MODULES}
 )
 
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_23)
 target_include_directories(${PROJECT_NAME} INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
-
-target_compile_options(${PROJECT_NAME} PRIVATE ${GLOBAL_COMPILE_OPTIONS})
-target_compile_definitions(${PROJECT_NAME} PRIVATE ${GLOBAL_COMPILE_DEFINITIONS})

@@ -7,7 +7,5 @@ target_sources(PixelPainter PUBLIC
     FILE_SET CXX_MODULES FILES "PixelPainter.ixx"
 )
 
+target_compile_features(PixelPainter PUBLIC cxx_std_23)
 target_include_directories(PixelPainter INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
-
-target_compile_options(PixelPainter PRIVATE ${GLOBAL_COMPILE_OPTIONS})
-target_compile_definitions(PixelPainter PRIVATE ${GLOBAL_COMPILE_DEFINITIONS})

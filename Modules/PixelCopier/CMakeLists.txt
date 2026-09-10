@@ -7,7 +7,5 @@ target_sources(PixelCopier PUBLIC
     FILE_SET CXX_MODULES FILES "PixelCopier.ixx"
 )
 
+target_compile_features(PixelCopier PUBLIC cxx_std_23)
 target_include_directories(PixelCopier INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
-
-target_compile_options(PixelCopier PRIVATE ${GLOBAL_COMPILE_OPTIONS})
-target_compile_definitions(PixelCopier PRIVATE ${GLOBAL_COMPILE_DEFINITIONS})
