@@ -113,16 +113,16 @@ cmake --build build
 
 | Module | Purpose / Domain | Key C++ Features Used |
 |:---|:---|:---|
-| **[`WinLite`](./WinLite)** | Lightweight Windowing & Event loop for **Windows (WinNT)** and **Linux (Xlib)**. | Native OS Display Handles, C++23 Unions |
-| **[`PixelPainter`](./PixelPainter)** | Software rasterizer canvas for custom 2D primitives. | `std::span`, Bresenham's loops, `constexpr` |
-| **[`PixelCopier`](./PixelCopier)** | Real-time texture blitting, clipping, and sprite scaling. | Fixed-Point `16.16` bit precision mapping, `std::span` |
-| **[`GlmLite`](./GlmLite)** | Ultra-lightweight vector math, 4x4 matrices & matrix transformations. | Column-major layout, `constexpr`, `std::sqrt/sin/cos` |
-| **[`OpenGL`](./OpenGL)** | Explicit OpenGL extension loader matrix (Modern **GLAD replacement**). | Dynamic symbol resolution (`GetProcAddress`), `import std;` |
-| **[`BmpLoader`](./BmpLoader)** | Exception-free 24/32-bit BMP image loader. | Monadic `std::expected`, layout padding checks |
-| **[`TgaLoader`](./TgaLoader)** | Exception-free 24/32-bit TGA true-color texture loader. | Monadic `std::expected`, descriptor orientation flags |
-| **[`BmpSaver`](./BmpSaver)** | 24/32-bit BMP image exporter and canvas dumper. | Monadic `std::expected`, safe memory serialization |
-| **[`HighResTimer`](./HighResTimer)** | Stopwatch performance timer for profiling loops. | Monadic clocks (`std::chrono::high_resolution_clock`) |
-| **[`FpsCounter`](./FpsCounter)** | Non-drifting real-time frames-per-second indicator. | Steady non-drifting accumulator intervals |
+| **[`WinLite`](./Modules/WinLite)** | Lightweight Windowing & Event loop for **Windows (WinNT)** and **Linux (Xlib)**. | Native OS Display Handles, C++23 Unions |
+| **[`PixelPainter`](./Modules/PixelPainter)** | Software rasterizer canvas for custom 2D primitives. | `std::span`, Bresenham's loops, `constexpr` |
+| **[`PixelCopier`](./Modules/PixelCopier)** | Real-time texture blitting, clipping, and sprite scaling. | Fixed-Point `16.16` bit precision mapping, `std::span` |
+| **[`GlmLite`](./Modules/GlmLite)** | Ultra-lightweight vector math, 4x4 matrices & matrix transformations. | Column-major layout, `constexpr`, `std::sqrt/sin/cos` |
+| **[`OpenGL`](./Modules/OpenGL)** | Explicit OpenGL extension loader matrix (Modern **GLAD replacement**). | Dynamic symbol resolution (`GetProcAddress`), `import std;` |
+| **[`BmpLoader`](./Modules/BmpLoader)** | Exception-free 24/32-bit BMP image loader. | Monadic `std::expected`, layout padding checks |
+| **[`TgaLoader`](./Modules/TgaLoader)** | Exception-free 24/32-bit TGA true-color texture loader. | Monadic `std::expected`, descriptor orientation flags |
+| **[`BmpSaver`](./Modules/BmpSaver)** | 24/32-bit BMP image exporter and canvas dumper. | Monadic `std::expected`, safe memory serialization |
+| **[`HighResTimer`](./Modules/HighResTimer)** | Stopwatch performance timer for profiling loops. | Monadic clocks (`std::chrono::high_resolution_clock`) |
+| **[`FpsCounter`](./Modules/FpsCounter)** | Non-drifting real-time frames-per-second indicator. | Steady non-drifting accumulator intervals |
 
 ---
 
