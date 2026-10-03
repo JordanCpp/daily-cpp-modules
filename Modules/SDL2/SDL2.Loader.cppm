@@ -78,6 +78,7 @@ public:
         LoadProc(SDL_RenderFillRect, "SDL_RenderFillRect", success);
         LoadProc(SDL_RenderDrawRect, "SDL_RenderDrawRect", success);
         LoadProc(SDL_RenderDrawLine, "SDL_RenderDrawLine", success);
+        LoadProc(SDL_RenderDrawLines, "SDL_RenderDrawLines", success);
         LoadProc(SDL_RenderDrawPoint, "SDL_RenderDrawPoint", success);
         LoadProc(SDL_RenderCopy, "SDL_RenderCopy", success);
         LoadProc(SDL_RenderCopyEx, "SDL_RenderCopyEx", success);
@@ -113,8 +114,6 @@ public:
         LoadProc(SDL_FreeSurface, "SDL_FreeSurface", success);
         LoadProc(SDL_LockSurface, "SDL_LockSurface", success);
         LoadProc(SDL_UnlockSurface, "SDL_UnlockSurface", success);
-        LoadProc(SDL_SaveBMP, "SDL_SaveBMP", success);
-        LoadProc(SDL_LoadBMP, "SDL_LoadBMP", success);
         LoadProc(SDL_SetSurfacePalette, "SDL_SetSurfacePalette", success);
         LoadProc(SDL_SetSurfaceRLE, "SDL_SetSurfaceRLE", success);
         LoadProc(SDL_SetColorKey, "SDL_SetColorKey", success);
@@ -125,13 +124,9 @@ public:
         LoadProc(SDL_GetSurfaceAlphaMod, "SDL_GetSurfaceAlphaMod", success);
         LoadProc(SDL_SetSurfaceBlendMode, "SDL_SetSurfaceBlendMode", success);
         LoadProc(SDL_GetSurfaceBlendMode, "SDL_GetSurfaceBlendMode", success);
-        LoadProc(SDL_SetSurfaceClipRect, "SDL_SetSurfaceClipRect", success);
-        LoadProc(SDL_GetSurfaceClipRect, "SDL_GetSurfaceClipRect", success);
         LoadProc(SDL_ConvertPixels, "SDL_ConvertPixels", success);
         LoadProc(SDL_FillRect, "SDL_FillRect", success);
         LoadProc(SDL_FillRects, "SDL_FillRects", success);
-        LoadProc(SDL_BlitSurface, "SDL_BlitSurface", success);
-        LoadProc(SDL_BlitScaled, "SDL_BlitScaled", success);
         LoadProc(SDL_UpperBlit, "SDL_UpperBlit", success);
         LoadProc(SDL_LowerBlit, "SDL_LowerBlit", success);
         LoadProc(SDL_SoftStretch, "SDL_SoftStretch", success);
