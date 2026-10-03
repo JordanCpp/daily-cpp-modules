@@ -13,11 +13,23 @@ target_compile_definitions(AppGL1 PRIVATE ${GLOBAL_COMPILE_DEFINITIONS})
 
 set(TARGET_NAMES
     GL1_AnimatedWave
+    GL1_EnvironmentMapping
+    GL1_FractalCarpet
     GL1_HeightFog
+    GL1_HolographicRadar
+    GL1_KineticDNA
+    GL1_LiquidMercuryMetaballs
+    GL1_MirrorEqualizer
+    GL1_ProjectiveStainedGlass
     GL1_RotatingCube
     GL1_RotatingPlanet
+    GL1_SpecularDiscoBall
+    GL1_StarfieldSpaceWarp
     GL1_StencilMirrorReflection
+    GL1_SynthwaveGrid
     GL1_Triangle
+    GL1_VectorXorExplosion
+    GL1_XRayStencil
 )
 
 foreach(TARGET_NAME IN LISTS TARGET_NAMES)

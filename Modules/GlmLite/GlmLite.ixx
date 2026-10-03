@@ -468,4 +468,11 @@ export namespace glm
     {
         return reinterpret_cast<const float*>(&v);
     }
+
+    template <typename T>
+        requires std::is_floating_point_v<T>
+    constexpr T degrees(T radians) noexcept 
+    {
+        return radians * (static_cast<T>(180) / std::numbers::pi_v<T>);
+    }
 }
