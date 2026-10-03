@@ -123,6 +123,10 @@ cmake --build build
 | **[`BmpSaver`](./Modules/BmpSaver)** | 24/32-bit BMP image exporter and canvas dumper. | Monadic `std::expected`, safe memory serialization |
 | **[`HighResTimer`](./Modules/HighResTimer)** | Stopwatch performance timer for profiling loops. | Monadic clocks (`std::chrono::high_resolution_clock`) |
 | **[`FpsCounter`](./Modules/FpsCounter)** | Non-drifting real-time frames-per-second indicator. | Steady non-drifting accumulator intervals |
+| **[`LibLoader`](./Modules/LibLoader)** | Cross-platform dynamic library loader for `.dll` and `.so` files. | OS-independent runtime binary loading |
+| **[`SDL1Loader`](./Modules/SDL1)** | Dynamic wrapper for the SDL 1.2 library. | Basic runtime `.dll`/`.so` abstraction |
+| **[`SDL2Loader`](./Modules/SDL2)** | Dynamic wrapper for the SDL 2.x library. | Basic runtime `.dll`/`.so` abstraction |
+| **[`SDL2Loader`](./Modules/SDL3)** | Dynamic wrapper for the SDL 3.x library. | Basic runtime `.dll`/`.so` abstraction |
 
 ---
 
