@@ -49,7 +49,7 @@ public:
         }
 
         _window.emplace(std::move(*windowResult));
-        _glLoader.emplace(3, 0);
+        _glLoader.emplace(3, 3);
 
         glViewport(0, 0, static_cast<GLsizei>(_width), static_cast<GLsizei>(_height));
 

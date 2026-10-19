@@ -33,6 +33,4 @@ set(GLOBAL_COMPILE_DEFINITIONS "")
 
 add_subdirectory(Modules)
 
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/examples/CMakeLists.txt")
-    add_subdirectory(examples)
-endif()
+add_subdirectory(examples)
