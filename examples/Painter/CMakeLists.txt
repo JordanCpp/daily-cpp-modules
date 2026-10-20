@@ -4,7 +4,7 @@ project(PainterExamples LANGUAGES CXX)
 
 add_library(AppPainter STATIC)
 target_sources(AppPainter PUBLIC 
-    FILE_SET CXX_MODULES FILES "App.ixx"
+    FILE_SET CXX_MODULES FILES "App.cppm"
 )
 
 target_link_libraries(AppPainter PUBLIC 

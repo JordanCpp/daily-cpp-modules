@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.30)
 add_library(HighResTimer STATIC)
 
 target_sources(HighResTimer PUBLIC 
-    FILE_SET CXX_MODULES FILES "HighResTimer.ixx"
+    FILE_SET CXX_MODULES FILES "HighResTimer.cppm"
 )
 
 target_compile_features(HighResTimer PUBLIC cxx_std_23)

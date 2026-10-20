@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.30)
 add_library(GlmLite STATIC)
 
 target_sources(GlmLite PUBLIC 
-    FILE_SET CXX_MODULES FILES "GlmLite.ixx"
+    FILE_SET CXX_MODULES FILES "GlmLite.cppm"
 )
 
 target_compile_features(GlmLite PUBLIC cxx_std_23)

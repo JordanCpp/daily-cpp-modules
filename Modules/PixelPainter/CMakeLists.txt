@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.30)
 add_library(PixelPainter STATIC)
 
 target_sources(PixelPainter PUBLIC 
-    FILE_SET CXX_MODULES FILES "PixelPainter.ixx"
+    FILE_SET CXX_MODULES FILES "PixelPainter.cppm"
 )
 
 target_compile_features(PixelPainter PUBLIC cxx_std_23)

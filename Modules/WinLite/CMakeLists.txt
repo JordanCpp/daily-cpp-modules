@@ -7,28 +7,28 @@ add_library(${PROJECT_NAME} STATIC)
 
 if(WIN32)
     set(OS_SPECIFIC_MODULES 
-        "WinLite.MainWindow.WinNt.ixx"
-        "WinLite.SoftwareWindow.Win.ixx"
-        "WinLite.OpenGL1Window.Win.ixx"
-        "WinLite.OpenGL3Window.Win.ixx"
+        "WinLite.MainWindow.WinNt.cppm"
+        "WinLite.SoftwareWindow.Win.cppm"
+        "WinLite.OpenGL1Window.Win.cppm"
+        "WinLite.OpenGL3Window.Win.cppm"
     )
     target_link_libraries(${PROJECT_NAME} PRIVATE opengl32)
 else()
     set(OS_SPECIFIC_MODULES
-        "WinLite.MainWindow.XLib.ixx"
-        "WinLite.SoftwareWindow.XLib.ixx"
-        "WinLite.OpenGL1Window.XLib.ixx"
-        "WinLite.OpenGL3Window.XLib.ixx"
+        "WinLite.MainWindow.XLib.cppm"
+        "WinLite.SoftwareWindow.XLib.cppm"
+        "WinLite.OpenGL1Window.XLib.cppm"
+        "WinLite.OpenGL3Window.XLib.cppm"
     )
     target_link_libraries(${PROJECT_NAME} PRIVATE GL X11)
 endif()
 
 target_sources(${PROJECT_NAME} PUBLIC FILE_SET CXX_MODULES FILES 
-    "WinLite.ixx"
-    "WinLite.KeyEnums.ixx"
-    "WinLite.KeyMapper.ixx"
-    "WinLite.Events.ixx"
-    "WinLite.Queue.ixx" 
+    "WinLite.cppm"
+    "WinLite.KeyEnums.cppm"
+    "WinLite.KeyMapper.cppm"
+    "WinLite.Events.cppm"
+    "WinLite.Queue.cppm" 
     ${OS_SPECIFIC_MODULES}
 )
 

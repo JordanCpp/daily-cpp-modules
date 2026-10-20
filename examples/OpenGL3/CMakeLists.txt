@@ -30,7 +30,7 @@ foreach(TARGET_NAME IN LISTS TARGET_NAMES)
 
     target_link_libraries(${TARGET_NAME} PRIVATE GlmLite WinLite OpenGL FpsCounter)
 
-    target_sources(${TARGET_NAME} PUBLIC FILE_SET CXX_MODULES FILES "AppGL3.ixx")
+    target_sources(${TARGET_NAME} PUBLIC FILE_SET CXX_MODULES FILES "AppGL3.cppm")
 
     target_compile_options(${TARGET_NAME} PRIVATE ${GLOBAL_COMPILE_OPTIONS})
     target_compile_definitions(${TARGET_NAME} PRIVATE ${GLOBAL_COMPILE_DEFINITIONS})

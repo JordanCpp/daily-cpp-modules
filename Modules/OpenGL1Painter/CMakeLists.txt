@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.30)
 add_library(OpenGL1Painter STATIC)
 
 target_sources(OpenGL1Painter PUBLIC 
-    FILE_SET CXX_MODULES FILES "OpenGL1Painter.ixx"
+    FILE_SET CXX_MODULES FILES "OpenGL1Painter.cppm"
 )
 
 target_link_libraries(OpenGL1Painter PUBLIC OpenGL)

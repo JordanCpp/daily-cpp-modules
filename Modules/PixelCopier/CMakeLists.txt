@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.30)
 add_library(PixelCopier STATIC)
 
 target_sources(PixelCopier PUBLIC 
-    FILE_SET CXX_MODULES FILES "PixelCopier.ixx"
+    FILE_SET CXX_MODULES FILES "PixelCopier.cppm"
 )
 
 target_compile_features(PixelCopier PUBLIC cxx_std_23)

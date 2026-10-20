@@ -4,7 +4,7 @@ project(OpenGLLegacyExamples LANGUAGES CXX)
 
 add_library(AppGL1 STATIC)
 target_sources(AppGL1 PUBLIC 
-    FILE_SET CXX_MODULES FILES "AppGL1.ixx"
+    FILE_SET CXX_MODULES FILES "AppGL1.cppm"
 )
 
 target_link_libraries(AppGL1 PUBLIC GlmLite WinLite OpenGL FpsCounter)
