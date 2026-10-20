@@ -188,7 +188,7 @@ export namespace glut
         std::size_t Height{ 600 };
         std::string Title{ "GLUT Window" };
 
-        int DisplayMode{};
+        unsigned int DisplayMode{};
 
         DisplayFunc       OnDisplay{ nullptr };
         ReshapeFunc       OnReshape{ nullptr };
