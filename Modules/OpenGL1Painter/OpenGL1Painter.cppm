@@ -122,7 +122,7 @@ export namespace OpenGL1
 
         void Resize(std::size_t width, std::size_t height) noexcept
         {
-            glViewport(0, 0, width, height);
+            glViewport(0, 0, static_cast<GLsizei>(width), static_cast<GLsizei>(height));
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
 
