@@ -188,6 +188,8 @@ export namespace glut
         std::size_t Height{ 600 };
         std::string Title{ "GLUT Window" };
 
+        int DisplayMode{};
+
         DisplayFunc       OnDisplay{ nullptr };
         ReshapeFunc       OnReshape{ nullptr };
         KeyboardFunc      OnKeyboard{ nullptr };
@@ -294,7 +296,7 @@ export namespace glut
 
     void glutInitDisplayMode(unsigned int mode) noexcept
     {
-        (void)mode;
+        context.DisplayMode = mode;
     }
 
     int glutCreateWindow(const char* title) noexcept
@@ -435,9 +437,12 @@ export namespace glut
             if (context.OnDisplay)
             {
                 context.OnDisplay();
-            }
 
-            //window.Present();
+                if ((context.DisplayMode & GLUT_DOUBLE) == 0)
+                {
+                    window.Present();
+                }
+            }
 
             ProcessTimers();
         }
