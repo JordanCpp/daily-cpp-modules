@@ -15,6 +15,16 @@ using namespace WinLite;
 
 export namespace glut
 {
+    constexpr unsigned int GLUT_RGB = 0x0000;
+    constexpr unsigned int GLUT_RGBA = 0x0000;
+    constexpr unsigned int GLUT_INDEX = 0x0001;
+    constexpr unsigned int GLUT_SINGLE = 0x0000;
+    constexpr unsigned int GLUT_DOUBLE = 0x0002;
+    constexpr unsigned int GLUT_ACCUM = 0x0004;
+    constexpr unsigned int GLUT_ALPHA = 0x0008;
+    constexpr unsigned int GLUT_DEPTH = 0x0010;
+    constexpr unsigned int GLUT_STENCIL = 0x0020;
+
     constexpr int GLUT_KEY_F1 = 1;
     constexpr int GLUT_KEY_F2 = 2;
     constexpr int GLUT_KEY_F3 = 3;
@@ -75,6 +85,8 @@ export namespace glut
     void glutKeyboardUpFunc(KeyboardUpFunc func) noexcept;
     void glutSpecialUpFunc(SpecialUpFunc func) noexcept;
     void glutTimerFunc(unsigned int msecs, TimerFunc func, int value) noexcept;
+
+    void glutSwapBuffers() noexcept;
 
     [[nodiscard]] constexpr unsigned char MapKeyToAscii(Key key) noexcept
     {
@@ -194,7 +206,7 @@ export namespace glut
         std::vector<TimerInfo> Timers{};
     };
 
-    inline GlutContext context{};
+    GlutContext context{};
 
     inline void ProcessKeyboardEvent(const WinLite::Keyboard& keyboard, int mouseX, int mouseY) noexcept
     {
@@ -331,6 +343,14 @@ export namespace glut
     void glutKeyboardUpFunc(KeyboardUpFunc func) noexcept { context.OnKeyboardUp = func; }
     void glutSpecialUpFunc(SpecialUpFunc func) noexcept { context.OnSpecialUp = func; }
 
+    void glutSwapBuffers() noexcept
+    {
+        if (context.Window.has_value()) [[likely]]
+        {
+            context.Window->Present();
+        }
+    }
+
     void glutTimerFunc(unsigned int msecs, TimerFunc func, int value) noexcept
     {
         if (!func) return;
@@ -417,7 +437,7 @@ export namespace glut
                 context.OnDisplay();
             }
 
-            window.Present();
+            //window.Present();
 
             ProcessTimers();
         }

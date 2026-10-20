@@ -127,6 +127,7 @@ cmake --build build
 | **[`SDL1Loader`](./Modules/SDL1)** | Dynamic wrapper for the SDL 1.2 library. | Basic runtime `.dll`/`.so` abstraction |
 | **[`SDL2Loader`](./Modules/SDL2)** | Dynamic wrapper for the SDL 2.x library. | Basic runtime `.dll`/`.so` abstraction |
 | **[`SDL2Loader`](./Modules/SDL3)** | Dynamic wrapper for the SDL 3.x library. | Basic runtime `.dll`/`.so` abstraction |
+| **[`GlutLite`](./Modules/GlutLite)** | Modern C++23 headerless wrapper mirroring classic GLUT. | Lightweight abstraction over `WinLite` events and OpenGL context |
 
 ---
 

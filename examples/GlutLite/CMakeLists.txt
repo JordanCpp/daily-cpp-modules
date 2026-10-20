@@ -2,6 +2,7 @@
 cmake_minimum_required(VERSION 3.30)
 
 set(TARGET_NAMES
+    Bounce
     GlutLite_Triangle)
 
 foreach(TARGET_NAME IN LISTS TARGET_NAMES)
